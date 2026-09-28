@@ -1,0 +1,2165 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wrestling Booker 0.2 — History & Today</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0d0f13;color:#eee;font:14px Arial,sans-serif}
+header{padding:16px 22px;background:#171a20;border-bottom:1px solid #30353e;display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:21px}.sub,.muted{color:#8d96a5;font-size:12px}.mode{display:flex;gap:8px;align-items:center}
+select,button{background:#20252d;color:#eee;border:1px solid #3a414c;border-radius:5px;padding:9px 11px}
+button{cursor:pointer}.gold{background:#d4a43b;color:#111;border-color:#e2b750;font-weight:bold}
+nav{padding:10px 22px;background:#12151a;border-bottom:1px solid #292e36;display:flex;gap:7px}
+nav button.active{background:#d4a43b;color:#111}
+main{max-width:1250px;margin:auto;padding:20px}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.card{background:#171a20;border:1px solid #2b3038;border-radius:6px;padding:14px}.num{font-size:25px;font-weight:bold;margin-top:5px}
+h2{font-size:16px;margin:22px 0 10px}table{width:100%;border-collapse:collapse;background:#171a20;border:1px solid #2b3038}
+th,td{padding:10px;border-bottom:1px solid #292e36;text-align:left;font-size:13px}th{font-size:10px;color:#8d96a5;text-transform:uppercase}
+.face{color:#65b9ff}.heel{color:#ff7474}.champ{color:#d4a43b}.grid2{display:grid;grid-template-columns:1.3fr .7fr;gap:12px}
+.match{display:flex;justify-content:space-between;padding:11px;border:1px solid #303640;margin:7px 0;background:#1c2027;border-radius:4px}
+.log{background:#090b0e;border:1px solid #292e36;padding:13px;height:230px;overflow:auto;font:12px/1.6 monospace}
+.pill{display:inline-block;padding:4px 7px;border-radius:10px;background:#292e36;color:#bbb;font-size:11px}
+.bar{height:6px;background:#292e36;border-radius:5px}.bar i{display:block;height:100%;background:#d4a43b}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}header{align-items:flex-start;gap:10px;flex-direction:column}}
+</style>
+<style>
+.bookerDash{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:#171a20;border:1px solid #303641;border-radius:10px;padding:14px}
+.kpi .label{font-size:12px;color:#9da6b3;text-transform:uppercase;letter-spacing:.08em}
+.kpi .value{font-size:24px;font-weight:800;margin-top:4px}
+.dashboardGrid{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.panel{background:#11141a;border:1px solid #303641;border-radius:12px;padding:16px;margin-bottom:14px}
+.panel h3{margin-top:0}
+.newsItem{padding:8px 0;border-bottom:1px solid #262b34}
+.rankRow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #262b34}
+.champ{font-size:22px;font-weight:800}
+@media(max-width:800px){.bookerDash,.dashboardGrid{grid-template-columns:1fr 1fr}.dashboardGrid{grid-template-columns:1fr}}
+</style>
+
+<style id="wb-app-shell">
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#18223b;--text:#eef3ff;--muted:#9eabc5;--accent:#f2b84b;--good:#61d095;--bad:#ef7070;--line:#2b395b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.wb-shell{max-width:1280px;margin:0 auto;padding:14px}
+.wb-top{position:sticky;top:0;z-index:20;background:rgba(11,16,32,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:10px 0}
+.wb-brand{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.wb-brand h1{font-size:20px;margin:0}.wb-brand small{color:var(--muted)}
+.wb-nav{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+.wb-nav button{white-space:nowrap;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:9px 12px;font-weight:700}
+.wb-nav button.active,.wb-nav button:hover{background:var(--accent);color:#111;border-color:var(--accent)}
+.wb-page{display:none;padding:16px 0}.wb-page.active{display:block}
+.wb-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.wb-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.wb-card h3{margin:0 0 9px;font-size:15px}.wb-big{font-size:26px;font-weight:800}.wb-muted{color:var(--muted);font-size:13px}
+.wb-table{width:100%;border-collapse:collapse}.wb-table th,.wb-table td{padding:9px;border-bottom:1px solid var(--line);text-align:left}.wb-table th{color:var(--muted);font-size:12px}
+.wb-btn{border:0;border-radius:9px;padding:9px 12px;background:var(--accent);color:#111;font-weight:800;cursor:pointer}.wb-btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.wb-stack{display:flex;gap:8px;flex-wrap:wrap}.wb-news{max-height:320px;overflow:auto}.wb-news div{padding:8px 0;border-bottom:1px solid var(--line)}
+@media(max-width:800px){.wb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wb-card{padding:11px}.wb-table{font-size:13px}}
+@media(max-width:520px){.wb-shell{padding:8px}.wb-grid{grid-template-columns:1fr 1fr}.wb-brand h1{font-size:17px}.wb-nav button{padding:8px 10px;font-size:12px}}
+</style>
+<style id="wb-legacy-hide">body>h1,body>.app,body>.container,body>header,body>main{}</style></head>
+<body>
+<div id="wbShell" class="wb-shell">
+  <div class="wb-top">
+    <div class="wb-brand">
+      <div><h1>WRESTLING BOOKER</h1><small>Autonomous Wrestling World</small></div>
+      <button class="wb-btn" onclick="wbNextWeek()">▶ Nächste Woche</button>
+    </div>
+    <div class="wb-nav">
+      <button onclick="wbTab('dashboard',this)" class="active">Dashboard</button>
+      <button onclick="wbTab('roster',this)">Roster</button>
+      <button onclick="wbTab('booking',this)">Booking</button>
+      <button onclick="wbTab('stories',this)">Stories</button>
+      <button onclick="wbTab('titles',this)">Titel</button>
+      <button onclick="wbTab('contracts',this)">Verträge</button>
+      <button onclick="wbTab('world',this)">World</button>
+      <button onclick="wbTab('history',this)">History</button>
+    </div>
+  </div>
+
+  <section id="wb-dashboard" class="wb-page active">
+    <div class="wb-grid" id="wbDashCards"></div>
+    <div class="wb-card" style="margin-top:12px"><h3>Latest News</h3><div id="wbNews" class="wb-news"></div></div>
+  </section>
+
+  <section id="wb-roster" class="wb-page">
+    <div class="wb-card"><h3>Roster</h3><div id="wbRoster"></div></div>
+  </section>
+
+  <section id="wb-booking" class="wb-page"><h2>Booking</h2>
+<div id="wb-booking-core">
+  <div class="wb-grid">
+    <div class="wb-card">
+      <h3>Neue Show</h3>
+      <label>Show
+        <select id="wbShowName">
+          <option>RAW</option><option>SmackDown</option><option>Dynamite</option>
+          <option>Collision</option><option>Impact</option><option>NJPW Strong</option>
+          <option>ROH Weekly</option><option>PPV / PLE</option>
+        </select>
+      </label>
+      <label>Showtyp
+        <select id="wbShowType"><option>TV</option><option>PPV</option></select>
+      </label>
+      <button class="wb-btn" style="margin-top:10px" onclick="wbNewShow()">Show starten</button>
+    </div>
+    <div class="wb-card">
+      <h3>Segment hinzufügen</h3>
+      <select id="wbSegType">
+        <option value="match">Match</option>
+        <option value="promo">Promo</option>
+        <option value="angle">Angle</option>
+      </select>
+      <select id="wbA" style="margin-top:7px"></select>
+      <select id="wbB" style="margin-top:7px"></select>
+      <select id="wbMatchType" style="margin-top:7px">
+        <option>Singles</option><option>Championship</option><option>Tag Team</option>
+        <option>Battle Royal</option><option>Main Event</option>
+      </select>
+      <select id="wbFinish" style="margin-top:7px">
+        <option>Clean Win</option><option>Dirty Win</option><option>Roll-up</option>
+        <option>Submission</option><option>Interference</option><option>DQ</option><option>Count-out</option>
+      </select>
+      <button class="wb-btn" style="margin-top:10px" onclick="wbAddSegment()">Zur Card</button>
+    </div>
+  </div>
+  <div class="wb-card" style="margin-top:12px">
+    <h3 id="wbCardTitle">Aktuelle Card</h3>
+    <div id="wbCardList" class="wb-news"></div><div id="wbConsequences" class="wb-card" style="margin-top:10px"><h3>Konsequenzen</h3><div class="wb-muted">Nach der Show erscheinen hier Titelwechsel, neue Fehden und Momentum-Veränderungen.</div></div>
+    <button class="wb-btn" style="margin-top:10px" onclick="wbRunShow()">🎬 Show durchführen</button>
+    <button class="wb-btn secondary" style="margin-top:10px" onclick="wbClearShow()">Card leeren</button> <button class="wb-btn secondary" style="margin-top:10px" onclick="wbPlanPPV()">📅 PPV planen</button>
+<div id="wb-career-panel" class="wb-card" style="margin-top:12px">
+ <h3>📈 Karriereentwicklung</h3>
+ <div id="wbCareerInfo" class="wb-news">Wöchentliche Entwicklung basiert auf Alter, Potential, Erfahrung, Momentum und Verletzungen.</div>
+</div>
+
+<div id="wb-smoke-panel" class="wb-card" style="margin-top:12px">
+ <h3>🧪 Engine-Test</h3>
+ <p class="wb-muted">Gestufter Test: Boot → 1 Woche → 1 Jahr.</p>
+ <button class="wb-btn" onclick="wbSmokeTest()">Test starten</button>
+ <div id="wbSmokeResult" style="margin-top:10px"></div>
+</div>
+<div id="wb-longterm-panel" class="wb-card" style="margin-top:12px">
+ <h3>⏩ Langzeitsimulation</h3>
+ <p class="wb-muted">Lass die Wrestlingwelt mehrere Jahre autonom weiterlaufen.</p>
+ <button class="wb-btn" onclick="wbOpenLongTerm()">10 Jahre simulieren</button>
+ <div id="wbLongTermInfo" style="margin-top:10px"></div>
+</div>
+<div id="wb-ppv-panel" class="wb-card" style="margin-top:12px">
+ <h3>🏟️ PPV / PLE</h3>
+ <div class="wb-stack">
+  <input id="wbPPVName" value="WrestleMania" placeholder="Eventname">
+  <button class="wb-btn" onclick="wbCreatePPV()">PPV vorbereiten</button>
+ </div>
+ <div id="wbPPVInfo" class="wb-news" style="margin-top:10px"></div>
+</div>
+
+  </div>
+</div>
+</section>
+
+  <section id="wb-stories" class="wb-page"><div class="wb-card"><h3>Stories & Fehden</h3><div id="wbStories"></div></div></section>
+  <section id="wb-titles" class="wb-page"><div class="wb-card"><h3>Titel-Szene</h3><div id="wbTitles"></div></div></section>
+  <section id="wb-contracts" class="wb-page"><div class="wb-card"><h3>Verträge & Free Agency</h3><div id="wbContracts"></div></div></section>
+  <section id="wb-world" class="wb-page"><div class="wb-card"><h3>Wrestling World</h3><div id="wbWorld"></div></div></section>
+  <section id="wb-history" class="wb-page"><div class="wb-card"><h3>Chronik</h3><div id="wbHistory" class="wb-news"></div></div></section>
+</div>
+
+<header>
+ <div><h1>WRESTLING BOOKER</h1><div class="sub">EWR-inspirierter Wrestling-Manager · Prototype 0.2</div></div>
+ <div class="mode"><span class="muted">ERA</span><select id="era" onchange="changeEra()">
+ <option value="2026">HEUTE · 2026</option><option value="1985">1985 · WWF / NWA</option><option value="1995">1995 · Monday Night Wars Vorlauf</option>
+ <option value="2000">2000 · Peak Attitude Era</option><option value="2010">2010 · PG / Indie Boom</option><option value="2020">2020 · Modern Era</option></select></div>
+</header>
+<nav><button class="active" onclick="page('home',this)">Dashboard</button><button onclick="page('roster',this)">Roster</button><button onclick="page('booking',this)">Booking</button><button onclick="page('world',this)">Wrestling World</button><button onclick="page('world',this)">World</button><button onclick="page('history',this)">History</button><button onclick="page('save',this)">Save</button><button onclick="page('save',this)">Save / Load</button></nav>
+<main id="app"></main>
+<script>
+const eras={
+1985:{prom:'WWF / NWA',stars:[
+['Hulk Hogan',94,86,95,96,'Face'],['Ric Flair',92,95,96,94,'Heel'],['Dusty Rhodes',88,84,97,92,'Face'],['Randy Savage',83,91,88,90,'Heel'],['Andre the Giant',91,78,79,92,'Face'],['Roddy Piper',82,76,94,88,'Heel'],['Terry Funk',78,92,91,85,'Heel'],['Junkyard Dog',79,82,86,88,'Face'],['Kerry Von Erich',77,88,79,84,'Face'],['Bob Backlund',80,91,82,83,'Face']]},
+1995:{prom:'WWF / WCW',stars:[
+['Shawn Michaels',91,96,94,95,'Heel'],['Bret Hart',94,97,91,94,'Face'],['The Undertaker',93,91,83,95,'Face'],['Hulk Hogan',92,80,91,96,'Heel'],['Sting',91,92,89,95,'Face'],['Randy Savage',86,87,93,91,'Face'],['Ric Flair',88,91,94,91,'Heel'],['Kevin Nash',84,80,84,88,'Heel'],['Scott Hall',85,84,89,90,'Heel'],['Mick Foley',79,91,92,84,'Face']]},
+2000:{prom:'WWF / WCW / ECW',stars:[
+['The Rock',94,89,98,98,'Face'],['Stone Cold Steve Austin',96,91,98,99,'Face'],['Triple H',92,96,91,93,'Heel'],['The Undertaker',91,91,87,94,'Face'],['Chris Jericho',86,91,94,91,'Heel'],['Kurt Angle',88,98,91,89,'Heel'],['Eddie Guerrero',83,96,92,88,'Face'],['Rey Mysterio',78,94,89,84,'Face'],['Brock Lesnar',72,93,78,86,'Heel'],['Raven',75,84,91,82,'Heel']]},
+2010:{prom:'WWE / TNA / ROH',stars:[
+['John Cena',96,89,96,98,'Face'],['Randy Orton',92,92,88,93,'Heel'],['The Undertaker',94,91,85,95,'Face'],['Edge',89,91,94,91,'Heel'],['Chris Jericho',88,91,95,91,'Heel'],['Rey Mysterio',87,93,88,89,'Face'],['Kurt Angle',88,96,91,90,'Heel'],['AJ Styles',82,96,88,86,'Face'],['Daniel Bryan',76,97,87,82,'Face'],['CM Punk',84,92,98,93,'Heel']]},
+2020:{prom:'WWE / AEW / NJPW',stars:[
+['Roman Reigns',91,92,91,94,'Heel'],['Jon Moxley',88,89,91,91,'Face'],['Kenny Omega',89,98,94,93,'Heel'],['Bryan Danielson',91,99,94,91,'Face'],['Seth Rollins',89,94,94,93,'Heel'],['Cody Rhodes',86,91,96,94,'Face'],['Becky Lynch',91,91,94,95,'Face'],['Sasha Banks',86,94,92,91,'Heel'],['Rhea Ripley',83,92,88,91,'Heel'],['MJF',79,86,98,92,'Heel']]},
+2026:{prom:'WWE / AEW / TNA',stars:[
+['Sami Zayn',91,90,93,94,'Face'],['Roman Reigns',94,93,92,96,'Face'],['Will Ospreay',92,99,93,94,'Face'],['Kenny Omega',90,98,94,93,'Face'],['MJF',88,89,99,96,'Heel'],['Cody Rhodes',92,93,97,96,'Face'],['CM Punk',91,89,98,96,'Heel'],['Rhea Ripley',94,94,93,96,'Face'],['Becky Lynch',91,92,95,96,'Face'],['Seth Rollins',91,95,95,94,'Heel'],['AJ Styles',86,94,90,91,'Face'],['Jeff Hardy',78,88,91,94,'Face'],['Matt Hardy',74,84,91,90,'Heel'],['Nic Nemeth',82,89,91,91,'Face'],['Mustafa Ali',73,91,88,85,'Heel'],['Moose',76,87,82,85,'Heel']]}};
+let S={era:2026,money:1000000,pop:65,week:1,champ:'Sami Zayn',card:[],history:[],relations:{},
+personalities:{'Sami Zayn':'Loyal, emotional, team-oriented','Roman Reigns':'Proud, ambitious, political','Will Ospreay':'Competitive, driven, restless',
+'Kenny Omega':'Perfectionist, competitive, cerebral','MJF':'Egotistical, calculating, opportunistic','Cody Rhodes':'Ambitious, diplomatic, traditional',
+'CM Punk':'Independent, outspoken, demanding','Rhea Ripley':'Confident, intense, loyal','Becky Lynch':'Ambitious, confident, protective',
+'Seth Rollins':'Eccentric, ambitious, competitive','AJ Styles':'Veteran, proud, professional','Jeff Hardy':'Impulsive, creative, loyal',
+'Matt Hardy':'Strategic, creative, stubborn','Nic Nemeth':'Professional, confident, adaptable','Mustafa Ali':'Ambitious, frustrated, creative','Moose':'Confident, physical, opportunistic'},
+morale:{},feuds:[],contracts:{},weekEvents:[],contenders:[],titles:{world:'World Championship'},storyLog:[],scouting:{},
+talentPool:[
+['Alex Mercer',22,61,74,69,'Face'],['Dylan Cross',24,58,82,71,'Heel'],['Leo Storm',21,54,88,76,'Face'],
+['Marcus Vale',26,67,79,83,'Heel'],['Noah Blake',20,49,76,70,'Face'],['Ethan Cole',23,56,81,78,'Heel']],
+careers:{},freeAgents:[],promotions:['WWE','AEW','TNA','NJPW','ROH','Independent'],
+promotionTitles:{
+ 'WWE':'WWE Championship','AEW':'AEW World Championship','TNA':'TNA World Championship',
+ 'NJPW':'IWGP World Heavyweight Championship','ROH':'ROH World Championship'
+},
+promotionStories:{},
+worldYear:2026,
+calendar:{month:1,year:2026},
+playerPromotion:'WWE',
+bookingCard:[],
+events:[],
+ppvHistory:[],
+nextEventId:1,
+teams:[],
+relationships:{},
+titleHistory:[],records:{},hallOfFame:[],
+promotionData:{
+'WWE':{pop:95,money:50000000,style:'Sports Entertainment',risk:35},
+'AEW':{pop:78,money:22000000,style:'Wrestling / Workrate',risk:65},
+'TNA':{pop:48,money:8000000,style:'Hybrid',risk:55},
+'NJPW':{pop:72,money:15000000,style:'Strong Style',risk:60},
+'ROH':{pop:38,money:4000000,style:'Pure Wrestling',risk:70},
+'Independent':{pop:25,money:1000000,style:'Indie',risk:80}},competitors:[],
+traits:{'Sami Zayn':['Loyal','Emotional','Team Player'],'Roman Reigns':['Proud','Ambitious','Political'],'Will Ospreay':['Competitive','Driven','Restless'],
+'Kenny Omega':['Perfectionist','Cerebral','Competitive'],'MJF':['Egotistical','Calculating','Opportunistic'],'Cody Rhodes':['Ambitious','Diplomatic','Traditional'],
+'CM Punk':['Outspoken','Independent','Demanding'],'Rhea Ripley':['Confident','Intense','Loyal'],'Becky Lynch':['Confident','Ambitious','Protective'],
+'Seth Rollins':['Eccentric','Competitive','Ambitious'],'AJ Styles':['Veteran','Proud','Professional'],'Jeff Hardy':['Impulsive','Creative','Loyal'],
+'Matt Hardy':['Strategic','Creative','Stubborn'],'Nic Nemeth':['Professional','Confident','Adaptable'],'Mustafa Ali':['Ambitious','Creative','Frustrated'],'Moose':['Confident','Physical','Opportunistic']},
+saveName:'My Wrestling World'};
+function data(){return (eras[S.era]&&eras[S.era].stars)?eras[S.era].stars:eras[2026].stars}
+function title(){return S.era==2026?'Sami Zayn':data()[0][0]}
+function page(p,b){document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');({home,roster,booking,world,history,savePage}[p]||home)()}
+
+function ensureCareer(name){
+ if(!S.careers[name])S.careers[name]={age:30,years:0,injuries:0,decline:0};
+ return S.careers[name];
+}
+function worldYearAdvance(){
+ // Die eigentliche Alterung passiert zentral in advanceCalendar().
+ // Diese Funktion kümmert sich nur noch um Jahresereignisse.
+ data().forEach(r=>{
+  let c=ensureCareer(r[0]);
+  if(c.age>=36 && Math.random()<.35){r[1]=Math.max(20,r[1]-1);r[2]=Math.max(20,r[2]-1);c.decline=(c.decline||0)+1;}
+  else if(c.age<30 && Math.random()<.45){r[1]=Math.min(100,r[1]+1);r[2]=Math.min(100,r[2]+1);}
+ });
+ if(Math.random()<.45)signTalent();
+ S.history.push(`📅 Jahreswechsel: Eine neue Wrestling-Saison beginnt.`);
+}
+function signTalent(){
+ if(!S.talentPool.length)return;
+ let i=Math.floor(Math.random()*S.talentPool.length),t=S.talentPool[i];
+ S.history.push(`🌟 Talent entdeckt: ${t[0]} (${t[1]}) erhält ein Development-Angebot.`);
+ if(Math.random()<.7){S.rookies=(S.rookies||[]);S.rookies.push(t);S.talentPool.splice(i,1);}
+}
+function contractMarket(){
+ if(!S.careers)S.careers={};
+ let names=Object.keys(S.careers);
+ names.forEach(n=>{
+   let c=S.careers[n]; if(c.status==='retired')return;
+   c.contract=(c.contract||0)-1;
+   if(c.contract>3)return;
+   let candidates=Object.keys(S.promotionData||{}).filter(x=>x!=='Independent');
+   if(!candidates.length)return;
+   let offers=candidates.map(pr=>{
+      let pd=S.promotionData[pr];
+      let base=120000+pd.pop*9000+(Math.random()*90000);
+      let fit=(pd.style==='Wrestling / Workrate' ? 15 : 0);
+      let interest=pd.pop/2+fit+Math.random()*30;
+      return {pr,salary:Math.round(base),interest};
+   }).sort((a,b)=>b.interest-a.interest);
+   let current=c.promotion||'Independent';
+   let currentOffer=offers.find(o=>o.pr===current);
+   if(currentOffer && c.loyalty>=65 && c.contract>0)return;
+   let offer=offers[0];
+   if(offer.interest>35 && Math.random()<.7){
+      let stayBonus=currentOffer?currentOffer.salary:0;
+      let chooseStay=c.loyalty>60 && stayBonus>=offer.salary*.85;
+      if(chooseStay){
+        c.contract=12;c.salary=Math.round(stayBonus);c.loyalty=Math.min(100,c.loyalty+4);
+        S.history.push(`📝 ${n} verlängert bei ${current} für $${c.salary.toLocaleString()}.`);
+      }else{
+        let old=current;c.promotion=offer.pr;c.contract=12;c.salary=offer.salary;c.loyalty=Math.max(20,c.loyalty-8);
+        S.history.push(`💰 ${n} wechselt von ${old} zu ${offer.pr} ($${offer.salary.toLocaleString()}).`);
+        S.history.push(`🎯 ${offer.pr} verpflichtet ${n} mit neuem Vertrag.`);
+      }
+   }else if(c.contract<=0){
+      c.promotion='Independent';c.contract=3;c.salary=60000;c.loyalty=35;
+      S.history.push(`🆓 ${n} wird Free Agent und arbeitet vorerst unabhängig.`);
+   }
+ });
+}
+
+
+
+function ensureTeams(){
+ if(!S.teams)S.teams=[];
+ if(!S.relationships)S.relationships={};
+}
+function relationshipKey(a,b){return [a,b].sort().join('|');}
+function getRelationship(a,b){
+ ensureTeams();
+ let k=relationshipKey(a,b);
+ if(S.relationships[k]===undefined)S.relationships[k]=Math.floor(35+Math.random()*50);
+ return S.relationships[k];
+}
+function teamEngine(){
+ ensureTeams();
+ let byPromo={};
+ Object.entries(S.careers||{}).forEach(([n,c])=>{
+   if(c.status==='retired')return;
+   (byPromo[c.promotion||'Independent'] ||= []).push(n);
+ });
+ Object.entries(byPromo).forEach(([pr,roster])=>{
+   if(pr==='Independent'||roster.length<2)return;
+   // Spontaneous alliances
+   if(Math.random()<.12){
+     let a=roster[Math.floor(Math.random()*roster.length)];
+     let b=roster[Math.floor(Math.random()*roster.length)];
+     if(a!==b && getRelationship(a,b)>65){
+       let exists=S.teams.find(t=>t.members.includes(a)&&t.members.includes(b));
+       if(!exists){
+         let team={name:`${a.split(' ')[0]} & ${b.split(' ')[0]}`,members:[a,b],promotion:pr,chemistry:Math.round((getRelationship(a,b)+Math.random()*30))};
+         S.teams.push(team);
+         S.history.push(`🤝 ${pr}: ${team.name} bildet sich als neues Tag Team.`);
+       }
+     }
+   }
+ });
+ // Team drama
+ S.teams.slice().forEach(t=>{
+   if(t.members.length<2)return;
+   let [a,b]=t.members;
+   let key=relationshipKey(a,b);
+   S.relationships[key]=(S.relationships[key]??60)+(Math.random()<.55?1:-2);
+   S.relationships[key]=Math.max(0,Math.min(100,S.relationships[key]));
+   t.chemistry=Math.max(10,Math.min(100,Math.round(S.relationships[key]+Math.random()*12-6)));
+   if(S.relationships[key]<25 && Math.random()<.25){
+     S.history.push(`💔 ${t.name} zerbricht nach internen Spannungen.`);
+     let idx=S.teams.indexOf(t); if(idx>=0)S.teams.splice(idx,1);
+     S.relationships[key]=10;
+     if(Math.random()<.7)S.history.push(`🔥 Der Bruch zwischen ${a} und ${b} entwickelt sich zur Fehde.`);
+   }
+ });
+ // Stable formation
+ if(Math.random()<.045){
+   let candidates=Object.entries(S.careers||{}).filter(([n,c])=>c.status!=='retired'&&c.promotion!=='Independent');
+   if(candidates.length>=3){
+     let chosen=candidates.sort(()=>Math.random()-.5).slice(0,3).map(x=>x[0]);
+     let pr=S.careers[chosen[0]].promotion;
+     if(chosen.every(n=>S.careers[n].promotion===pr)){
+       let name=`The ${chosen[0].split(' ')[0]} Alliance`;
+       S.teams.push({name,members:chosen,promotion:pr,chemistry:70,stable:true});
+       S.history.push(`👥 ${pr}: Neues Stable entsteht — ${name}.`);
+     }
+   }
+ }
+}
+
+
+
+
+function advanceCalendar(weeks=1){
+ if(!S.calendar)S.calendar={month:1,year:S.worldYear||2026,week:1};
+ if(!S.calendar.week)S.calendar.week=1;
+ for(let i=0;i<weeks;i++){
+   S.calendar.week++;
+   if(S.calendar.week>52){
+     S.calendar.week=1;
+     S.calendar.year++;
+     S.worldYear=S.calendar.year;
+     Object.values(S.careers||{}).forEach(c=>{
+       if(c.status!=='retired'){c.age=(c.age||0)+1;c.years=(c.years||0)+1;}
+     });
+     S.history.push(`📅 Jahreswechsel: ${S.calendar.year}. Neue Wrestling-Generation beginnt.`);
+   }
+ }
+ S.calendar.month=Math.min(12,Math.floor((S.calendar.week-1)/4.3333333333)+1);
+}
+function currentDateLabel(){
+ let c=S.calendar||{month:1,year:2026};
+ return `${String(c.month).padStart(2,'0')}/${c.year}`;
+}
+function legacyEngine(){
+ if(!S.titleHistory)S.titleHistory=[];
+ if(!S.records)S.records={};
+ if(!S.hallOfFame)S.hallOfFame=[];
+ // Track title reigns from promotion stories
+ Object.entries(S.promotionStories||{}).forEach(([pr,st])=>{
+   if(!st.champion)return;
+   let key=pr+'|'+st.champion;
+   if(!S.records[key])S.records[key]={promotion:pr,wrestler:st.champion,weeks:0,reigns:0};
+   S.records[key].weeks++;
+ });
+ // Detect retirement and create Hall of Fame candidates
+ Object.entries(S.careers||{}).forEach(([n,c])=>{
+   if(c.status==='retired' && !S.hallOfFame.some(x=>x.name===n)){
+     let score=(c.legacy||0)+(c.years||0)*5;
+     if(score>=80 || Math.random()<0.35){
+       S.hallOfFame.push({name:n,year:S.worldYear||2026,legacy:Math.round(score)});
+       S.history.push(`🏛️ ${n} wird in die Hall of Fame aufgenommen.`);
+     }
+   }
+ });
+ // Career records
+ Object.entries(S.careers||{}).forEach(([n,c])=>{
+   let years=c.years||0;
+   if(years>=10){
+     let r=S.records['career_'+n]||{wrestler:n,years:0};
+     r.years=Math.max(r.years,years);
+     S.records['career_'+n]=r;
+   }
+ });
+}
+function talentEngine(){
+ if(!S.talentPool)S.talentPool=[];
+ if(!S.scouting)S.scouting={};
+ let regions=['Japan','USA','Canada','UK','Mexico','Europe'];
+ let styles=['Technical','High Flyer','Powerhouse','Brawler','Charismatic','Hardcore'];
+ // Generate new prospects occasionally
+ if(Math.random()<0.08){
+   let first=['Alex','Dylan','Leo','Marcus','Noah','Ethan','Jordan','Tyler','Ryan','Liam','Mason','Kai','Logan','Cole'];
+   let last=['Mercer','Cross','Storm','Vale','Blake','Cole','Stone','Hayes','King','Ryder','West','Fox','Knight','Reed'];
+   let name=first[Math.floor(Math.random()*first.length)]+' '+last[Math.floor(Math.random()*last.length)];
+   if(!S.talentPool.some(t=>t.name===name) && !S.careers[name]){
+     let age=18+Math.floor(Math.random()*9);
+     let prospect={name,age,region:regions[Math.floor(Math.random()*regions.length)],style:styles[Math.floor(Math.random()*styles.length)],
+       potential:55+Math.floor(Math.random()*44),skill:35+Math.floor(Math.random()*35),hype:10+Math.floor(Math.random()*25),scouted:false};
+     S.talentPool.push(prospect);
+     S.history.push(`🌱 Neues Talent entdeckt: ${name} (${prospect.region}, ${prospect.style}).`);
+   }
+ }
+ // Develop unsigned talent
+ S.talentPool.forEach(t=>{
+   if(!t.scouted && Math.random()<0.08){
+     t.scouted=true;
+     S.history.push(`🔎 Scouts werden auf ${t.name} aufmerksam.`);
+   }
+   if(t.scouted && Math.random()<0.35 && t.skill<t.potential){
+     t.skill=Math.min(t.potential,t.skill+1+Math.floor(Math.random()*3));
+     t.hype=Math.min(100,t.hype+Math.random()*2);
+   }
+ });
+ // Promotions sign promising prospects
+ let prospects=S.talentPool.filter(t=>t.scouted && !S.careers[t.name] && t.skill>=45);
+ if(prospects.length && Math.random()<0.35){
+   let p=prospects[Math.floor(Math.random()*prospects.length)];
+   let promos=Object.keys(S.promotionData||{}).filter(x=>x!=='Independent');
+   let pr=promos[Math.floor(Math.random()*promos.length)];
+   S.careers[p.name]={age:p.age,years:0,injuries:0,decline:0,promotion:pr,contract:24,salary:70000+Math.round(p.skill*2500),
+     loyalty:50,morale:75,alignment:'Face',personality:'Professional',injured:false,injuryWeeks:0,retirementRisk:0,legacy:0,momentum:50,starpower:50,potential:70,experience:20,injuryProne:10,status:'active'};
+   S.history.push(`✍️ ${pr} verpflichtet das Nachwuchstalent ${p.name}.`);
+   S.talentPool=S.talentPool.filter(t=>t.name!==p.name);
+ }
+}
+
+function wrestlerProgressionEngine(){
+ Object.entries(S.careers||{}).forEach(([n,c])=>{
+   if(c.status==='retired'||c.injured)return;
+   let d=data().find(x=>x[0]===n);
+   if(!d)return;
+   c.experience=Math.min(100,(c.experience||20)+0.08);
+   let momentum=c.momentum||50, potential=c.potential||70;
+   // Recent momentum drives short-term push
+   if(momentum>70 && Math.random()<.25)c.starpower=Math.min(100,(c.starpower||50)+1);
+   if(momentum<30 && Math.random()<.20)c.starpower=Math.max(1,(c.starpower||50)-1);
+   // Development for young talent, decline for veterans
+   if((c.age||0)<30 && Math.random()<.22){
+      let idx=1+Math.floor(Math.random()*4);
+      d[idx]=Math.min(99,d[idx]+(Math.random()<.65?1:0));
+      c.potential=Math.min(100,potential+0.2);
+   }
+   if((c.age||0)>=35 && Math.random()<.12){
+      let idx=1+Math.floor(Math.random()*4);
+      d[idx]=Math.max(25,d[idx]-1);
+   }
+   // Momentum naturally moves based on morale, alignment and recent activity
+   if((c.morale||70)>80)c.momentum=Math.min(100,momentum+0.6);
+   if((c.morale||70)<40)c.momentum=Math.max(0,momentum-0.8);
+   c.starpower=Math.max(1,Math.min(100,(c.starpower||50)+((c.momentum||50)-50)/180));
+ });
+}
+function careerHealthEngine(){
+ Object.entries(S.careers||{}).forEach(([n,c])=>{
+   if(c.status==='retired')return;
+   c.age=(c.age||0);
+   c.legacy=(c.legacy||0)+0.15;
+   if(c.injured){
+     c.injuryWeeks=Math.max(0,(c.injuryWeeks||0)-1);
+     if(c.injuryWeeks===0){
+       c.injured=false;
+       c.morale=Math.min(100,(c.morale||70)+8);
+       S.history.push(`🩹 ${n} kehrt nach Verletzung zurück.`);
+     }
+     return;
+   }
+   let risk=0.012;
+   if(c.age>=35)risk+=0.012;
+   if(c.age>=40)risk+=0.018;
+   if(Math.random()<risk){
+     c.injured=true;
+     c.injuryWeeks=Math.floor(2+Math.random()*18);
+     c.morale=Math.max(10,(c.morale||70)-6);
+     S.history.push(`🚑 ${n} verletzt sich und fällt ${c.injuryWeeks} Wochen aus.`);
+   }
+   if(c.age>=42) c.retirementRisk=Math.min(100,(c.retirementRisk||0)+2);
+   if(c.age>=45) c.retirementRisk=Math.min(100,(c.retirementRisk||0)+4);
+   if(c.age>=48 && Math.random()<0.04){
+     c.status='retired'; c.contract=0; c.retirementRisk=100;
+     S.history.push(`🎤 ${n} beendet seine aktive Karriere.`);
+   }
+ });
+}
+function alignmentEngine(){
+ Object.entries(S.careers||{}).forEach(([n,c])=>{
+   if(c.status==='retired')return;
+   c.morale=c.morale??70;
+   let chance=0;
+   if(c.morale<35)chance+=.08;
+   if(c.morale>88)chance+=.025;
+   if(c.personality==='Rebel')chance+=.025;
+   if(c.personality==='Ego')chance+=.015;
+   if(Math.random()<chance){
+     c.alignment=c.alignment==='Face'?'Heel':'Face';
+     c.morale=Math.min(100,c.morale+8);
+     S.history.push(`🔄 ${n} turnt zum ${c.alignment}.`);
+   }
+ });
+}
+function promotionWeek(){
+ let P=S.promotionData||{};
+ Object.keys(P).forEach(name=>{
+  let payroll=Object.values(S.careers||{}).filter(c=>c.promotion===name).reduce((a,c)=>a+(c.salary||0)/52,0);
+  P[name].money-=Math.round(payroll);
+  let x=P[name];
+  x.money+=Math.round(x.pop*1200-(x.style==='Indie'?8000:18000));
+  let change=Math.random();
+  if(change<.25)x.pop=Math.min(100,x.pop+1);
+  else if(change>.88)x.pop=Math.max(1,x.pop-1);
+ });
+ let names=Object.keys(P), buyer=names[Math.floor(Math.random()*names.length)], target=data()[Math.floor(Math.random()*data().length)];
+ if(buyer!=='Independent' && Math.random()<.22){
+   let strength=P[buyer].pop, value=target[1];
+   if(strength>value-5)S.history.push(`💼 ${buyer} bietet ${target[0]} einen Vertrag an.`);
+ }
+ if(Math.random()<.15){
+   let a=names[Math.floor(Math.random()*names.length)],b=names[Math.floor(Math.random()*names.length)];
+   if(a!==b)S.history.push(`⚔️ Promotion War: ${a} und ${b} kämpfen um Marktanteile.`);
+ }
+}
+
+
+
+function ensureEvents(){
+ if(!S.events)S.events=[];
+ if(!S.nextEventId)S.nextEventId=1;
+}
+function addEvent(type,name,pr,weeksAhead=1){
+ ensureEvents();
+ let c=S.calendar||{month:1,year:2026};
+ let total=(c.year*12+c.month)+weeksAhead;
+ let year=Math.floor((total-1)/12), month=((total-1)%12)+1;
+ S.events.push({id:S.nextEventId++,type,name,promotion:pr,year,month,booked:false});
+}
+function eventEngine(){
+ ensureEvents();
+ let c=S.calendar||{month:1,year:2026}, pr=S.playerPromotion||'WWE';
+ if(!S.events.some(e=>e.promotion===pr&&e.type==='PPV'&&e.year===c.year&&e.month===c.month)){
+   if(c.month%3===0) addEvent('PPV',`${pr} Major Event`,pr,0);
+ }
+ let tvNames={WWE:['RAW','SmackDown'],AEW:['Dynamite','Collision'],TNA:['Impact'],NJPW:['NJPW STRONG'],ROH:['ROH Weekly']};
+ if(c.month){
+   let name=(tvNames[pr]||['Weekly Show'])[Math.floor(Math.random()*(tvNames[pr]||['Weekly Show']).length)];
+   if(!S.events.some(e=>e.promotion===pr&&e.type==='TV'&&e.year===c.year&&e.month===c.month&&e.name===name))
+      addEvent('TV',name,pr,0);
+ }
+}
+function eventCalendar(){
+ ensureEvents();
+ let c=S.calendar||{month:1,year:2026};
+ let upcoming=S.events.filter(e=>(e.year>c.year)||(e.year===c.year&&e.month>=c.month)).sort((a,b)=>(a.year*12+a.month)-(b.year*12+b.month)).slice(0,16);
+ return `<h2>📅 Event Calendar</h2><div class="cards">${upcoming.map(e=>`<div class="card"><b>${e.type==='PPV'?'🏟️':'📺'} ${e.name}</b><div>${e.promotion}</div><div class="muted">${String(e.month).padStart(2,'0')}/${e.year} · ${e.booked?'Booked':'Upcoming'}</div></div>`).join('')||'<div class="muted">Keine Events.</div>'}</div>`;
+}
+function renderDashboard(){
+ let pr=S.playerPromotion||'WWE', pd=S.promotionData?.[pr]||{pop:0,money:0,style:'-'};
+ let st=S.promotionStories?.[pr]||{};
+ let roster=Object.entries(S.careers||{}).filter(([n,c])=>c.promotion===pr&&c.status!=='retired');
+ let active=roster.filter(([n,c])=>!c.injured).length;
+ let injured=roster.length-active;
+ let ranked=roster.map(([n,c])=>{
+   let d=data().find(x=>x[0]===n)||[n,50,50,50,50];
+   return {n,score:Math.round((d[1]+d[2]+d[3]+d[4])/4)};
+ }).sort((a,b)=>b.score-a.score).slice(0,6);
+ return `<div class="panel">
+ <div class="bookerDash">
+  <div class="kpi"><div class="label">Datum</div><div class="value">${currentDateLabel()}</div></div>
+  <div class="kpi"><div class="label">Promotion</div><div class="value">${pr}</div></div>
+  <div class="kpi"><div class="label">Popularität</div><div class="value">${Math.round(pd.pop)}</div></div>
+  <div class="kpi"><div class="label">Finanzen</div><div class="value">$${Math.round(pd.money).toLocaleString()}</div></div>
+ </div>
+ <div class="dashboardGrid">
+  <div>
+   <div class="panel"><h3>🏆 Aktuelle Story</h3>
+   <div class="champ">${st.champion||'Noch kein Champion'}</div>
+   <div>🎯 Contender: ${st.contender||'—'}</div><div>🔥 Heat: ${st.heat||0}</div></div>
+   <div class="panel"><h3>📊 Power Ranking</h3>
+   ${ranked.map((r,i)=>`<div class="rankRow"><span>#${i+1} ${r.n}</span><b>${r.score}</b></div>`).join('')}</div>
+  </div>
+  <div>
+   <div class="panel"><h3>🤼 Roster</h3><div class="champ">${active}</div><div>aktive Wrestler · ${injured} verletzt</div></div>
+   <div class="panel"><h3>📰 Latest News</h3>
+   ${(S.history||[]).slice(-8).reverse().map(x=>`<div class="newsItem">${x}</div>`).join('')||'Noch keine Nachrichten.'}</div>
+  </div>
+ </div></div>`;
+}
+function choosePromotion(pr){
+ S.playerPromotion=pr;
+ S.promotion=pr;
+ S.history.push(`🎮 Du übernimmst ${pr} als Booker.`);
+ render();
+}
+function playerPromotionPanel(){
+ let names=Object.keys(S.promotionData||{}).filter(x=>x!=='Independent');
+ return `<h2>🎮 Deine Promotion</h2>
+ <div class="cards">${names.map(n=>{
+   let x=S.promotionData[n], active=n===S.playerPromotion;
+   return `<div class="card ${active?'active':''}">
+   <b>${n}</b><div class="num">${x.pop}</div><div>${x.style}</div>
+   <div class="muted">$${x.money.toLocaleString()}</div>
+   <button onclick="choosePromotion('${n}')">${active?'Übernommen':'Übernehmen'}</button>
+   </div>`;
+ }).join('')}</div>
+ <div class="log">Du buchst diese Promotion selbst. Alle anderen Promotions werden von der KI geführt.</div>`;
+}
+
+function addBookingMatch(){
+ let pr=S.playerPromotion||'WWE';
+ let roster=Object.keys(S.careers||{}).filter(n=>S.careers[n].promotion===pr && S.careers[n].status!=='retired');
+ if(roster.length<2){alert('Zu wenig Wrestler im Roster.');return;}
+ let a=document.getElementById('bookA')?.value, b=document.getElementById('bookB')?.value;
+ if(!a||!b||a===b)return;
+ let type=document.getElementById('bookType')?.value||'Singles';
+ let finish=document.getElementById('bookFinish')?.value||'clean';
+ let winner=document.getElementById('bookWinner')?.value||a;
+ S.bookingCard.push({kind:'match',a,b,type,title:type==='Championship',finish,winner});
+ render();
+}
+function addBookingSegment(){
+ let type=document.getElementById('segmentType')?.value||'PROMO';
+ let who=document.getElementById('segmentWho')?.value||'';
+ if(!who)return;
+ S.bookingCard.push({kind:'segment',type,who});
+ render();
+}
+function removeBooking(i){S.bookingCard.splice(i,1);render();}
+function applyFinishConsequences(seg, pr){
+ let loser=seg.winner===seg.a?seg.b:seg.a;
+ if(seg.finish==='dirty'){
+   S.history.push(`😈 ${seg.winner} gewinnt schmutzig gegen ${loser}.`);
+   if(Math.random()<.65) S.history.push(`🔥 ${loser} fordert eine Revanche gegen ${seg.winner}.`);
+   S.history.push(`🤬 ${loser} verliert etwas Moral.`);
+ }else if(seg.finish==='interference'){
+   S.history.push(`⚡ Eingriff verhindert einen fairen Ausgang: ${seg.winner} schlägt ${loser}.`);
+   S.history.push(`🔥 Eine neue Fehde zwischen ${seg.winner} und ${loser} nimmt Fahrt auf.`);
+ }else if(seg.finish==='rollup'){
+   S.history.push(`🎲 ${seg.winner} überrascht ${loser} mit einem Roll-up.`);
+   S.history.push(`😤 ${loser} verlangt eine zweite Chance.`);
+ }else if(seg.finish==='submission'){
+   S.history.push(`🔒 ${seg.winner} zwingt ${loser} zur Aufgabe.`);
+ }else if(seg.finish==='dq'){
+   S.history.push(`🚨 Disqualification: ${seg.winner} gewinnt durch DQ.`);
+ }else if(seg.finish==='countout'){
+   S.history.push(`⏱️ Count-out: ${seg.winner} gewinnt, nachdem ${loser} nicht rechtzeitig zurückkehrt.`);
+ }
+ if(seg.title){
+   let st=S.promotionStories?.[pr];
+   if(st && st.champion && (seg.a===st.champion || seg.b===st.champion)){
+      if(seg.winner!==st.champion && ['clean','submission','rollup'].includes(seg.finish)){
+        let old=st.champion; st.champion=seg.winner;
+        S.history.push(`🏆 ${seg.winner} gewinnt den Titel von ${old}.`);
+        st.contender=loser; st.heat=10; st.weeks=0;
+      }
+   }
+ }
+}
+
+function calculatePPVEconomics(pr,quality,event){
+ let pd=S.promotionData[pr]||{pop:50,money:0};
+ let roster=Object.entries(S.careers||{}).filter(([n,c])=>c.promotion===pr&&c.status!=='retired');
+ let starPower=roster.map(([n])=>data().find(x=>x[0]===n)||[n,50,50,50,50])
+   .sort((a,b)=>((b[1]+b[2]+b[3]+b[4])-(a[1]+a[2]+a[3]+a[4]))).slice(0,6)
+   .reduce((a,x)=>a+(x[1]+x[2]+x[3]+x[4])/4,0);
+ let attendance=Math.round(2500+pd.pop*420+starPower*55+Math.random()*4000);
+ let ticketPrice=25+Math.round(pd.pop/8);
+ let ticketRevenue=attendance*ticketPrice;
+ let buys=Math.round(attendance*(0.12+pd.pop/1000)*(quality/70));
+ let merch=Math.round(attendance*(3+starPower/60));
+ let ppvScore=Math.max(30,Math.min(100,Math.round(quality+pd.pop/10+starPower/30)));
+ let revenue=ticketRevenue+buys*25+merch;
+ pd.money+=revenue;
+ pd.pop=Math.max(1,Math.min(100,pd.pop+(ppvScore-70)/18));
+ let result={event:event.name,date:`${event.month}/${event.year}`,promotion:pr,quality,attendance,ticketRevenue,buys,merch,revenue,ppvScore};
+ S.ppvHistory.push(result);
+ S.history.push(`💰 ${event.name}: ${attendance.toLocaleString()} Zuschauer · ${buys.toLocaleString()} Käufe · $${revenue.toLocaleString()} Umsatz · PPV ${ppvScore}/100`);
+ return result;
+}
+function simulatePlayerShow(){
+ let pr=S.playerPromotion||'WWE';
+ if(!S.bookingCard.length){alert('Baue zuerst eine Card.');return;}
+ let quality=0, report=[];
+ S.bookingCard.forEach(seg=>{
+   if(seg.kind==='match'){
+     let A=data().find(x=>x[0]===seg.a)||[seg.a,55,55,55,55];
+     let B=data().find(x=>x[0]===seg.b)||[seg.b,55,55,55,55];
+     let rating=Math.round((A[1]+A[2]+A[3]+A[4]+B[1]+B[2]+B[3]+B[4])/8+Math.random()*15-5);
+     if(seg.title)rating+=5;
+     if(seg.finish==='interference'||seg.finish==='dq')rating-=3;
+     rating=Math.max(35,Math.min(99,rating));
+     report.push(`🤼 ${seg.a} vs ${seg.b} — ${rating}/100 — ${seg.winner} gewinnt (${seg.finish})`);
+     quality+=rating;
+     applyFinishConsequences(seg,pr);
+   }else{
+     let d=data().find(x=>x[0]===seg.who)||[seg.who,55,55,55,55];
+     let rating=Math.round((d[2]+d[3]+d[4])/3+Math.random()*18-6);
+     if(seg.type==='ANGLE')rating+=5;
+     rating=Math.max(30,Math.min(98,rating));
+     report.push(`🎤 ${seg.type}: ${seg.who} — ${rating}/100`);
+     quality+=rating;
+   }
+ });
+ let avg=Math.round(quality/S.bookingCard.length);
+ let current=(S.events||[]).find(e=>e.promotion===pr&&e.year===(S.calendar?.year||2026)&&e.month===(S.calendar?.month||1)&&!e.booked);
+ if(current){
+   current.booked=true;
+   if(current.type==='PPV'){
+     avg=Math.min(100,avg+8);
+     calculatePPVEconomics(pr,avg,current);
+   }
+   S.history.push(`🏟️ ${current.name} — ${current.type} Showwertung: ${avg}/100`);
+ }
+ let pd=S.promotionData[pr];
+ pd.pop=Math.max(1,Math.min(100,pd.pop+(avg-65)/25));
+ pd.money+=Math.round(avg*5000);
+ S.history.push(`📺 ${pr} — Deine Show: ${avg}/100`);
+ report.forEach(x=>S.history.push(x));
+ S.bookingCard=[];
+ S.week++;
+ autonomousWeek();
+ promotionWeek();
+ alignmentEngine();
+ teamEngine();
+ wrestlerProgressionEngine();
+ careerHealthEngine();
+ talentEngine();
+ legacyEngine();
+ advanceCalendar(1);
+ eventEngine();
+ render();
+}
+function bookingPanel(){
+ let pr=S.playerPromotion||'WWE';
+ let roster=Object.keys(S.careers||{}).filter(n=>S.careers[n].promotion===pr && S.careers[n].status!=='retired');
+ let opts=roster.map(n=>`<option>${n}</option>`).join('');
+ return `<h2>🎬 Book Your Show — ${pr}</h2>
+ <div class="log">
+ <select id="bookA">${opts}</select>
+ <select id="bookB">${opts}</select>
+ <select id="bookType"><option>Singles</option><option>Championship</option><option>Main Event</option><option>Tag</option></select>
+ <select id="bookWinner">${opts}</select>
+ <select id="bookFinish"><option value="clean">Clean Win</option><option value="dirty">Dirty Win</option><option value="rollup">Roll-up</option><option value="submission">Submission</option><option value="interference">Interference</option><option value="dq">DQ</option><option value="countout">Count-out</option></select>
+ <button onclick="addBookingMatch()">Match hinzufügen</button>
+ <br><br>
+ <select id="segmentWho">${opts}</select>
+ <select id="segmentType"><option>PROMO</option><option>ANGLE</option></select>
+ <button onclick="addBookingSegment()">Segment hinzufügen</button>
+ </div>
+ <div class="log"><b>Aktuelle Card</b><br>
+ ${S.bookingCard.map((x,i)=>`<div>${i+1}. ${x.kind==='match'?`🤼 ${x.a} vs ${x.b} — ${x.type}`:`🎭 ${x.type}: ${x.who}`} <button onclick="removeBooking(${i})">✕</button></div>`).join('')||'Noch keine Segmente.'}
+ <br><button onclick="simulatePlayerShow()">▶ SHOW AUSWERTEN</button></div>`;
+}
+function autonomousWeek(){
+let d=data(); if(!d.length)return;
+let a=d[Math.floor(Math.random()*d.length)], b=d[Math.floor(Math.random()*d.length)];
+if(a[0]===b[0]) b=d[(d.indexOf(a)+1)%d.length];
+[d[0],...d].forEach(r=>{if(S.morale[r[0]]==null)S.morale[r[0]]=Math.round(60+Math.random()*30)});
+let roll=Math.random(), amb=a[3], loyalty=a[4];
+ensureCareer(a[0]); ensureCareer(b[0]); contractMarket();
+if(roll<.18){
+  let heat=Math.round(42+Math.random()*45); S.feuds.push({a:a[0],b:b[0],heat});
+  S.history.push(`🔥 Fehde: ${a[0]} und ${b[0]} geraten backstage aneinander. Heat ${heat}.`);
+  S.morale[a[0]]=Math.max(1,S.morale[a[0]]-3); S.morale[b[0]]=Math.max(1,S.morale[b[0]]-2);
+}else if(roll<.35){
+  S.history.push(`🤝 Beziehung: ${a[0]} und ${b[0]} entwickeln backstage Vertrauen.`);
+}else if(roll<.50){
+  let delta=amb>88?-6:-3; S.morale[a[0]]=Math.max(1,S.morale[a[0]]+delta);
+  S.history.push(`😤 Morale: ${a[0]} ist mit seiner Position unzufrieden.`);
+}else if(roll<.64){
+  S.history.push(`📺 Creative: ${a[0]} fordert mehr TV-Zeit.`);
+  if(amb>90) S.morale[a[0]]=Math.max(1,S.morale[a[0]]-4);
+}else if(roll<.76){
+  S.history.push(`💰 Vertrag: ${a[0]} prüft seine Optionen auf dem Markt.`);
+}else if(roll<.88){
+  S.history.push(`🩹 Gesundheit: ${b[0]} wird vorsichtshalber für eine Woche geschont.`);
+}else{
+  S.history.push(`🌟 Breakout: ${a[0]} liefert backstage einen starken Eindruck und gewinnt Momentum.`);
+  a[1]=Math.min(100,a[1]+1);
+}
+S.feuds=S.feuds.slice(-12);
+if(S.history.length>100)S.history=S.history.slice(-100);
+}
+function home(){
+let d=data(),avg=Math.round(d.reduce((a,r)=>a+r[1],0)/d.length);
+
+app.innerHTML=`<div class="cards"><div class="card"><div class="muted">PROMOTION</div><div class="num" style="font-size:18px">${eras[S.era].prom}</div></div><div class="card"><div class="muted">CASH</div><div class="num">$${S.money.toLocaleString()}</div></div><div class="card"><div class="muted">POPULARITY</div><div class="num">${S.pop}</div></div><div class="card"><div class="muted">WEEK</div><div class="num">${S.week}</div></div><div class="card"><div class="muted">ROSTER AVG.</div><div class="num">${avg}</div></div></div>
+<h2>Current World</h2><div class="grid2"><div class="card"><b>World Championship</b><p class="champ">🏆 ${S.champ}</p><span class="pill">${S.era==2026?'current 2026 database':'historical simulation'}</span></div><div class="card"><b>Next Show</b><p>Monday Mayhem · Week ${S.week}</p><button class="gold" onclick="page('booking',document.querySelectorAll('nav button')[2])">Book Show</button></div></div>
+<h2>Autonomous World</h2>
+<div class="grid2"><div class="card"><b>AI Locker Room</b><p class="muted">Langzeittest: 10 Jahre echte Wochen-Simulation.</p><button onclick="simulateWeeks(520)">⏩ 10 Jahre simulieren</button> <button onclick="simulateWeeks(104)">+ 2 Jahre</button></div><div class="card"><b>AI Locker Room</b><p class="muted">Die Wrestler treffen teilweise eigene Entscheidungen. Beziehungen, Morale, Fehden und Karriereentwicklung können sich auch ohne dein Booking verändern.</p><button onclick="autonomousWeek();home()">Advance 1 week</button> <button class="gold" onclick="simulateWeeks(4)">Simulate 4 weeks</button></div>
+<div class="card"><b>Active Feuds</b>${S.feuds.slice(-4).map(f=>`<div class="match"><span>${f.a} vs ${f.b}</span><span>${f.heat}% heat</span></div>`).join('')||'<p class="muted">Noch keine Fehden.</p>'}</div></div>
+<h2>Backstage</h2><div class="log">${S.history.slice(-12).reverse().join('<br>')||'No incidents yet. The locker room is waiting.'}</div>`;
+}
+function roster(){
+app.innerHTML=`<h2>${eras[S.era].prom} — Roster</h2><table><tr><th>Wrestler</th><th>Pop</th><th>Ring</th><th>Mic</th><th>Charisma</th><th>Role</th><th>Overall</th><th>Personality</th></tr>${data().map(r=>`<tr><td><b>${r[0]}</b>${r[0]==S.champ?' 🏆':''}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td class="${r[5].toLowerCase()}">${r[5]}</td><td><div class="bar"><i style="width:${Math.round((r[1]+r[2]+r[3]+r[4])/4)}%"></i></div></td><td class="muted">${S.personalities[r[0]]||'Driven, competitive'}</td></tr>`).join('')}</table><p class="muted">Die Werte sind Spiel-Simulationswerte, keine offiziellen Bewertungen.</p>`;
+}
+function booking(){
+let d=data();
+app.innerHTML=`<h2>Monday Mayhem — Creative / Booking</h2>
+<div class="grid2">
+<div class="card"><div class="muted">CURRENT CARD</div>
+<div id="card">${S.card.length?S.card.map((m,i)=>`<div class="match"><span>${i+1}. <b>${m.type}</b> — ${m.a}${m.b?' vs '+m.b:''}</span><span>${m.segment||''}</span></div>`).join(''):'<p class="muted">Noch keine Segmente gebucht.</p>'}</div>
+<div class="controls"><button onclick="addSegment('MATCH')">Match hinzufügen</button><button onclick="addSegment('PROMO')">Promo hinzufügen</button><button onclick="addSegment('ANGLE')">Angle hinzufügen</button><button class="gold" onclick="simulate()">Show simulieren</button></div></div>
+<div class="card"><b>Segment Creator</b>
+<p class="muted">Wähle zwei Worker und bestimme, was auf der Show passiert.</p>
+<select id="a">${d.map(r=>`<option>${r[0]}</option>`).join('')}</select>
+<select id="b">${d.map(r=>`<option>${r[0]}</option>`).join('')}</select>
+<select id="stype"><option value="Singles">Singles Match</option><option value="Championship">Championship Match</option><option value="Tag">Tag Team Match</option><option value="Battle">Battle Royal</option><option value="MAIN EVENT">Main Event</option></select>
+</div></div>
+<h2>Match / Segment Effects</h2>
+<div class="card"><span class="pill">Match → Wrestling + Psychology + Chemistry</span> <span class="pill">Promo → Mic + Charisma + Heat</span> <span class="pill">Angle → Personality + Story + Relationships</span></div>`;
+}
+function addSegment(kind){
+let A=a.value,B=b.value;
+if(kind==='MATCH') S.card.push({type:stype.value,a:A,b:B,segment:'MATCH'});
+if(kind==='PROMO') S.card.push({type:'PROMO',a:A,b:B,segment:'Verbal exchange'});
+if(kind==='ANGLE') S.card.push({type:'ANGLE',a:A,b:B,segment:'Backstage / Story'});
+booking();
+}
+function add(){if(a.value==b.value)return;S.card.push({a:a.value,b:b.value,type:type.value});booking()}
+function simulate(){
+if(!S.card.length){
+let d=data(); S.card=[{type:'Singles',a:d[0][0],b:d[1][0],segment:'MATCH'},{type:'PROMO',a:d[2][0],b:d[0][0],segment:'Verbal exchange'},{type:'MAIN EVENT',a:d[4][0],b:d[3][0],segment:'MATCH'}]
+}
+let ratings=[],effects=[];
+S.card.forEach(m=>{
+ let A=data().find(r=>r[0]===m.a),B=m.b?data().find(r=>r[0]===m.b):null;
+ if(m.segment==='MATCH'){
+   let base=B?(A[1]+B[1]+A[2]+B[2]+A[3]+B[3])/6:A[1];
+   let chemistry=B?(Math.random()*18-5):0;
+   let r=Math.round(base+chemistry+(m.type==='MAIN EVENT'?7:0)+(m.type==='Championship'?4:0));
+   r=Math.max(45,Math.min(99,r));ratings.push(r);
+   effects.push(`MATCH: ${m.a} vs ${m.b} → ${r}/100`);
+   if(B && r>=85){S.pop=Math.min(100,S.pop+1);S.morale[m.a]=Math.min(100,(S.morale[m.a]??70)+2);S.morale[m.b]=Math.min(100,(S.morale[m.b]??70)+2)}
+ } else if(m.segment==='PROMO'){
+   let r=Math.round((A[3]+A[4])*.55+Math.random()*18);
+   if(B) r=Math.round((r+(B[3]+B[4])*.35)/1.35);
+   r=Math.max(40,Math.min(99,r));ratings.push(r);
+   effects.push(`PROMO: ${m.a}${B?' / '+m.b:''} → ${r}/100`);
+   if(r>=80){S.pop=Math.min(100,S.pop+1);S.feuds.push({a:m.a,b:m.b||'Audience',heat:Math.min(99,50+Math.round(r/2))})}
+ } else {
+   let r=Math.round((A[1]+A[3]+A[4])/3+Math.random()*20-5);r=Math.max(40,Math.min(98,r));
+   ratings.push(r);effects.push(`ANGLE: ${m.a}${B?' / '+m.b:''} → ${r}/100`);
+   if(B){S.feuds.push({a:m.a,b:m.b,heat:Math.min(99,55+Math.round(r/3))});S.history.push(`📖 Story: ${m.a} und ${m.b} haben jetzt eine aktive Storyline.`)}
+ }
+});
+let avg=Math.round(ratings.reduce((a,b)=>a+b,0)/ratings.length);
+S.pop=Math.max(1,Math.min(100,S.pop+(avg>=82?2:avg<58?-1:0)));
+S.money+=Math.round(avg*1200-22000);
+S.history.push(`W${S.week}: Monday Mayhem beendet · Show Ø ${avg}/100 · Pop ${S.pop}`);
+S.history.push(...effects);
+S.week++;S.card=[];alert(`SHOW BEENDET\n\nSegments: ${ratings.length}\nAverage: ${avg}/100\nPopularity: ${S.pop}`);home();
+}
+function simulateWeeks(n){
+for(let i=0;i<n;i++){
+ autonomousWeek(); promotionWeek(); alignmentEngine(); teamEngine(); wrestlerProgressionEngine(); careerHealthEngine(); talentEngine(); legacyEngine(); advanceCalendar(1); eventEngine(); S.week++;
+ if(S.week%52===0) worldYearAdvance();
+}
+home()
+}
+function world(){
+let rows=S.feuds.slice(-10).map((f,i)=>`<tr><td><b>${f.a}</b> vs <b>${f.b}</b></td><td>${f.stage||'Diss'}</td><td>${f.heat}</td><td>${f.weeks||1}</td><td><button onclick="advanceFeud(${Math.max(0,S.feuds.length-10+i)})">Advance</button></td></tr>`).join('');
+let cont=S.contenders.map((x,i)=>`<div class="match"><span>#${i+1} ${x}</span><button onclick="titleShot('${x.replace(/'/g,"\\'")}')">Title Shot</button></div>`).join('');
+app.innerHTML=`<h2>Wrestling World — ${S.era}</h2>
+<div class="grid2"><div class="card"><b>🏆 World Championship</b><p class="champ">${S.champ}</p><button class="gold" onclick="createContender()">Create #1 Contender</button></div>
+<div class="card"><b>#1 Contenders</b>${cont||'<p class="muted">Keine Contender.</p>'}</div></div>
+<h2>Active Feuds</h2><table><tr><th>Feud</th><th>Stage</th><th>Heat</th><th>Weeks</th><th>Creative</th></tr>${rows||'<tr><td colspan="5" class="muted">Keine aktiven Fehden.</td></tr>'}</table>
+<h2>Career Health</h2>
+<div class="cards">${Object.entries(S.careers||{}).filter(([n,c])=>c.status!=='retired').slice(0,18).map(([n,c])=>`<div class="card"><b>${n}</b><div>${c.injured?'🚑 VERLETZT':'🟢 Aktiv'} · Alter ${c.age||0}</div><div class="muted">${c.injured?`Ausfall: ${c.injuryWeeks} Wochen`:`Retirement Risk ${c.retirementRisk||0}`}</div></div>`).join('')}</div>
+<h2>Tag Teams & Stables</h2>
+<div class="cards">${(S.teams||[]).map(t=>`<div class="card"><b>${t.name}</b><div>${t.members.join(' · ')}</div><div class="muted">${t.promotion} · Chemistry ${t.chemistry}</div></div>`).join('')||'<div class="muted">Noch keine Teams oder Stables.</div>'}</div>
+<h2>Alignment & Morale</h2>
+<div class="cards">${Object.entries(S.careers||{}).filter(([n,c])=>c.status!=='retired').slice(0,16).map(([n,c])=>`<div class="card"><b>${n}</b><div>${c.alignment||'Face'} · ${c.personality||'Professional'}</div><div class="muted">Morale ${c.morale??70} · Loyalty ${c.loyalty??50}</div></div>`).join('')}</div>
+<h2>Contract Market</h2>
+<div class="log">${Object.entries(S.careers||{}).filter(([n,c])=>c.status!=='retired').sort((a,b)=>(a[1].contract||0)-(b[1].contract||0)).slice(0,12).map(([n,c])=>`<div>🤼 <b>${n}</b> — ${c.promotion||'Independent'} · ${c.contract||0} weeks · $${(c.salary||0).toLocaleString()} · Loyalty ${c.loyalty||50}</div>`).join('')||'Keine Vertragsdaten.'}</div>
+<h2>Promotion Landscape</h2>
+<div class="cards">
+${Object.entries(S.promotionData||{}).map(([n,x])=>`<div class="card"><b>${n}</b><div class="num">${x.pop}</div><div class="muted">${x.style}</div><div class="muted">$${x.money.toLocaleString()}</div></div>`).join('')}
+</div>
+<h2>Career / World Simulation</h2>
+<div class="grid2">
+<div class="card"><b>Active Careers</b>
+${data().slice(0,10).map(r=>{let c=ensureCareer(r[0]);return `<div class="match"><span>${r[0]}</span><span>Age ${c.age} · ${c.decline?'Decline':'Prime'}</span></div>`}).join('')}
+</div>
+<div class="card"><b>Talent Pipeline</b>
+${(S.talentPool||[]).map(r=>`<div class="match"><span>${r[0]}</span><span>${r[1]} · Ring ${r[2]}</span></div>`).join('')||'<p class="muted">No prospects.</p>'}
+</div></div>
+<h2>Storyline Engine</h2><div class="card"><span class="pill">DISS</span> → <span class="pill">CONFRONTATION</span> → <span class="pill">ESCALATION</span> → <span class="pill">BLOW-OFF</span><p class="muted">Heat, Morale und Match-Erwartung verändern sich über mehrere Shows.</p></div>
+<h2>Story Log</h2><div class="log">${S.storyLog.slice(-15).reverse().join('<br>')||'Noch keine langfristigen Stories.'}</div>`;
+}
+function createContender(){
+let pool=data().filter(r=>r[0]!==S.champ).sort((a,b)=>b[1]-a[1]);
+if(!pool.length)return; let x=pool[Math.floor(Math.random()*Math.min(6,pool.length))][0];
+if(!S.contenders.includes(x))S.contenders.unshift(x);S.contenders=S.contenders.slice(0,5);
+S.storyLog.push(`🏆 ${x} wird als möglicher #1 Contender aufgebaut.`);world();
+}
+function titleShot(name){
+S.feuds.push({a:S.champ,b:name,heat:68,stage:'Confrontation',weeks:1});
+S.storyLog.push(`🏆 Titelprogramm gestartet: ${S.champ} vs ${name}.`);
+S.contenders=S.contenders.filter(x=>x!==name);world();
+}
+function advanceFeud(index){
+let f=S.feuds[index];if(!f)return;
+let stages=['Diss','Confrontation','Escalation','Blow-off'],pos=stages.indexOf(f.stage||'Diss');
+if(pos<3){f.stage=stages[pos+1];f.weeks=(f.weeks||1)+1;f.heat=Math.min(100,f.heat+Math.round(7+Math.random()*8));S.storyLog.push(`🔥 ${f.a} vs ${f.b}: ${f.stage} — Heat ${f.heat}.`);}
+else{f.stage='Completed';f.heat=30;S.storyLog.push(`💥 Blow-off: ${f.a} vs ${f.b} ist abgeschlossen.`);}
+world();
+}
+function savePage(){
+app.innerHTML=`<h2>Save / Load</h2><div class="card"><p><b>${S.saveName||'My Wrestling World'}</b></p><p class="muted">Speichere deine komplette Wrestlingwelt als JSON.</p><div class="controls"><button class="gold" onclick="downloadSave()">Save Game</button><button onclick="loadSave()">Load Game</button><button onclick="location.reload()">Reset</button></div></div>`;
+}
+function downloadSave(){
+let blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wrestling-world-save.json';a.click();URL.revokeObjectURL(a.href);
+}
+function loadSave(){
+let i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{let f=i.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{S=JSON.parse(r.result);document.getElementById('era').value=S.era;home();alert('Savegame geladen.')}catch(e){alert('Ungültiger Spielstand.')}};r.readAsText(f)};i.click();
+}
+function history(){app.innerHTML=`<h2>Promotion History</h2><div class="log">${S.history.slice().reverse().join('<br>')||'Noch keine Shows.'}</div><h2>Market</h2><div class="cards">${Object.entries(S.promotionData||{}).map(([n,x])=>`<div class="card"><b>${n}</b><div class="num">${x.pop}</div><div class="muted">${x.style}</div></div>`).join('')}</div>`}
+function changeEra(){S.era=+document.getElementById('era').value;S.champ=S.era===2026?'Sami Zayn':title();S.card=[];home()}
+home();
+</script>
+<script id="wb-app-controller">
+function wbTab(name,btn){
+ document.querySelectorAll('.wb-page').forEach(x=>x.classList.remove('active'));
+ const el=document.getElementById('wb-'+name); if(el)el.classList.add('active');
+ document.querySelectorAll('.wb-nav button').forEach(x=>x.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ wbRender();
+}
+function wbNextWeek(){
+ try{
+   wbSeasonWeek();
+   if(typeof wbAgentDecisions==='function')wbAgentDecisions();
+   if(typeof advanceCalendar==='function')advanceCalendar(1);
+   S.week=(S.week||1)+1;
+   wbShowAutonomy(); wbRenderLocker(); wbRenderMedia(); wbRenderBusiness();
+   wbRender(); wbRenderSeasonReport(); wbRenderArcs();
+ }catch(e){console.error(e); alert('Die Woche konnte nicht fortgesetzt werden: '+e.message);}
+}
+function wbGetCareerNames(){
+ return Object.keys(window.S?.careers||{});
+}
+function wbRender(){
+ const S0=window.S||{};
+ const pd=S0.promotionData||{};
+ const pr=pd[S0.playerPromotion]||pd.WWE||{};
+ const careers=S0.careers||{};
+ const names=wbGetCareerNames();
+ const active=names.filter(n=>(careers[n]?.status||'active')!=='retired');
+ const injured=names.filter(n=>careers[n]?.injured);
+ document.getElementById('wbDashCards').innerHTML=[
+  ['Promotion',S0.playerPromotion||'WWE'],
+  ['Popularität',Math.round(pr.pop||0)],
+  ['Kasse','$'+Math.round(pr.money||0).toLocaleString()],
+  ['Roster',active.length],
+  ['Verletzte',injured.length],
+  ['Champion',pr.champion||'—'],
+  ['Contender',pr.contender||'—'],
+  ['Woche',S0.week||0]
+ ].map(x=>`<div class="wb-card"><h3>${x[0]}</h3><div class="wb-big">${x[1]}</div></div>`).join('');
+ document.getElementById('wbNews').innerHTML=(S0.history||[]).slice(-30).reverse().map(x=>`<div>${x}</div>`).join('')||'<div class="wb-muted">Noch keine Nachrichten.</div>';
+
+ document.getElementById('wbRoster').innerHTML='<table class="wb-table"><tr><th>Name</th><th>Alter</th><th>Morale</th><th>Momentum</th><th>Status</th></tr>'+
+ active.sort((a,b)=>(careers[b].momentum||0)-(careers[a].momentum||0)).map(n=>{let c=careers[n];return `<tr><td>${n}</td><td>${c.age||'—'}</td><td>${Math.round(c.morale||0)}</td><td>${Math.round(c.momentum||0)}</td><td>${c.injured?'🤕 verletzt':(c.status||'active')}</td></tr>`}).join('')+'</table>';
+
+ const feats=S0.feuds||[];
+ document.getElementById('wbStories').innerHTML=feats.length?feats.slice(0,20).map(f=>`<div class="wb-card" style="margin-bottom:8px"><b>${f.a||'?'} vs. ${f.b||'?'}</b><br><span class="wb-muted">Heat: ${Math.round(f.heat||0)} · ${f.stage||'laufend'}</span></div>`).join(''):'<div class="wb-muted">Aktuell keine großen Fehden.</div>';
+
+ document.getElementById('wbTitles').innerHTML=Object.entries(pd).map(([k,p])=>`<div class="wb-card" style="margin-bottom:8px"><b>${k}</b><br>Champion: ${p.champion||'—'}<br><span class="wb-muted">Contender: ${p.contender||'—'}</span></div>`).join('');
+
+ document.getElementById('wbContracts').innerHTML=active.slice(0,40).map(n=>{let c=careers[n];return `<div style="padding:8px 0;border-bottom:1px solid var(--line)"><b>${n}</b> · ${c.promotion||'Free Agent'} · ${c.contract||0} Wochen · $${Math.round(c.salary||0).toLocaleString()}</div>`}).join('');
+
+ if(typeof wbRenderWorld==='function')wbRenderWorld();
+
+ document.getElementById('wbHistory').innerHTML=(S0.history||[]).slice().reverse().map(x=>`<div>${x}</div>`).join('');
+}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{wbRender();if(typeof wbRenderLocker==='function')wbRenderLocker();if(typeof wbRenderMedia==='function')wbRenderMedia();if(typeof wbRenderBusiness==='function')wbRenderBusiness();if(typeof wbRenderMarket==='function')wbRenderMarket();},50));
+</script>
+
+<script id="wb-booking-engine">
+window.WB_CARD=window.WB_CARD||[];
+function wbNames(){
+ const cs=window.S?.careers||{};
+ return Object.keys(cs).filter(n=>cs[n]?.status!=='retired').sort((a,b)=>(cs[b]?.momentum||0)-(cs[a]?.momentum||0));
+}
+function wbFillWrestlers(){
+ const a=document.getElementById('wbA'),b=document.getElementById('wbB'); if(!a||!b)return;
+ const ns=wbNames();
+ const opts=ns.map(n=>`<option>${n}</option>`).join('');
+ a.innerHTML=opts;b.innerHTML=opts;
+ if(ns[1])b.value=ns[1];
+}
+function wbNewShow(){
+ WB_CARD=[]; window.WB_SHOW={name:document.getElementById('wbShowName').value,type:document.getElementById('wbShowType').value};
+ document.getElementById('wbCardTitle').textContent=`${WB_SHOW.name} – ${WB_SHOW.type}`;
+ wbRenderCard(); wbFillWrestlers();
+}
+function wbAddSegment(){
+ const type=document.getElementById('wbSegType').value;
+ const a=document.getElementById('wbA').value,b=document.getElementById('wbB').value;
+ if(!a)return;
+ let seg={type,a,b,matchType:document.getElementById('wbMatchType').value,finish:document.getElementById('wbFinish').value};
+ if(type==='promo'||type==='angle')seg.matchType='';
+ WB_CARD.push(seg); wbRenderCard();
+}
+function wbRenderCard(){
+ const el=document.getElementById('wbCardList'); if(!el)return;
+ el.innerHTML=WB_CARD.length?WB_CARD.map((x,i)=>{
+   const label=x.type==='match'?`${x.matchType}: ${x.a} vs. ${x.b} — ${x.finish}`:x.type==='promo'?`🎤 Promo: ${x.a}`:`🎬 Angle: ${x.a}${x.b?' / '+x.b:''}`;
+   return `<div style="padding:10px;border-bottom:1px solid var(--line)"><b>${i+1}.</b> ${label} <button class="wb-btn secondary" onclick="WB_CARD.splice(${i},1);wbRenderCard()">×</button></div>`;
+ }).join(''):'<div class="wb-muted">Noch keine Segmente. Baue deine Show.</div>';
+}
+function wbRunShow(){
+ if(!WB_CARD.length){alert('Die Card ist noch leer.');return;}
+ let total=0, results=[];
+ const cs=window.S?.careers||{};
+ WB_CARD.forEach((x,i)=>{
+   if(x.type!=='match'){results.push(`🎤 ${x.a}: Segment durchgeführt.`); total+=58; return;}
+   let ca=cs[x.a]||{},cb=cs[x.b]||{};
+   let pa=(ca.momentum||50)+(ca.starpower||50)+(ca.experience||20)*.3+(ca.morale||50)*.2;
+   let pb=(cb.momentum||50)+(cb.starpower||50)+(cb.experience||20)*.3+(cb.morale||50)*.2;
+   let quality=Math.max(35,Math.min(98,48+(pa+pb)/9+(Math.random()*16-8)));
+   let winner=pa>=pb?x.a:x.b;
+   if(Math.random()<.18)winner=winner===x.a?x.b:x.a;
+   let loser=winner===x.a?x.b:x.a;
+   wbAgentReaction(x.a,winner===x.a?(x.finish==="Dirty Win"?"win":"win"):(x.finish==="Dirty Win"?"dirtyloss":"loss"),x.b);
+   wbAgentReaction(x.b,winner===x.b?"win":"loss",x.a);
+   let finish=x.finish;
+   if(finish==='Interference'){quality+=3; if(Math.random()<.65){let f=window.S?.feuds?.find(f=>(f.a===x.a&&f.b===x.b)||(f.a===x.b&&f.b===x.a));if(f)f.heat=Math.min(100,(f.heat||0)+10);}}
+   ca.momentum=Math.max(0,Math.min(100,(ca.momentum||50)+(winner===x.a?4:-3)));
+   cb.momentum=Math.max(0,Math.min(100,(cb.momentum||50)+(winner===x.b?4:-3)));
+   ca.morale=Math.max(0,Math.min(100,(ca.morale||70)+(winner===x.a?2:-1)));
+   cb.morale=Math.max(0,Math.min(100,(cb.morale||70)+(winner===x.b?2:-1)));
+   total+=quality;
+   results.push(`🥊 ${x.a} vs. ${x.b}: <b>${winner}</b> gewinnt (${finish}) · ${Math.round(quality)} Rating`);
+ });
+ let score=Math.round(total/WB_CARD.length);
+ const pd=window.S?.promotionData||{},pr=pd[window.S?.playerPromotion]||pd.WWE;
+ if(pr){pr.pop=Math.max(0,Math.min(100,(pr.pop||50)+(score-65)/18));pr.money=(pr.money||0)+Math.round(score*900);}
+ if(window.S?.history)window.S.history.push(`📺 ${window.WB_SHOW?.name||'Show'} abgeschlossen: ${score}/100 · ${WB_CARD.length} Segmente.`);
+ document.getElementById('wbCardList').innerHTML=`<div class="wb-card"><h3>Show Rating: ${score}/100</h3>${results.map(r=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)">${r}</div>`).join('')}</div>`;
+ WB_CARD=[];
+ wbRender(); wbFillWrestlers();
+}
+function wbClearShow(){WB_CARD=[];wbRenderCard();}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{wbFillWrestlers();wbRenderCard();if(typeof wbAgentReport==='function')wbAgentReport()},100));
+</script>
+
+<script id="wb-booking-v2">
+function wbEnsurePromotion(pr){
+ pr.titleHistory=pr.titleHistory||[];
+ pr.contenders=pr.contenders||[];
+ pr.activeStories=pr.activeStories||[];
+}
+function wbFindFeud(a,b){
+ const fs=window.S?.feuds||[];
+ return fs.find(f=>(f.a===a&&f.b===b)||(f.a===b&&f.b===a));
+}
+function wbCreateFeud(a,b,reason="Booking"){
+ if(!window.S)return null;
+ S.feuds=S.feuds||[];
+ let f=wbFindFeud(a,b);
+ if(!f){f={a,b,heat:35,stage:"Diss",weeks:0,reason};S.feuds.push(f);}
+ else {f.heat=Math.min(100,(f.heat||0)+12);f.weeks=(f.weeks||0)+1;}
+ return f;
+}
+function wbApplyFinishConsequences(x,winner,loser){
+ const f=wbFindFeud(x.a,x.b);
+ if(["Dirty Win","Roll-up","Interference","DQ","Count-out"].includes(x.finish)){
+   const nf=f||wbCreateFeud(x.a,x.b,x.finish);
+   nf.heat=Math.min(100,(nf.heat||0)+18);
+   nf.stage=nf.heat>=75?"Escalation":nf.heat>=50?"Confrontation":"Diss";
+ } else if(f){
+   f.heat=Math.min(100,(f.heat||0)+5);
+ }
+ const pr=(S.promotionData||{})[S.playerPromotion]||{};
+ if(x.matchType==="Championship"){
+   wbEnsurePromotion(pr);
+   const old=pr.champion;
+   if(old!==winner){
+     pr.champion=winner;
+     pr.contender=loser;
+     pr.titleHistory.push({champion:winner,former:old,date:currentDateLabel?.()||S.week});
+     S.history.push(`🏆 TITELWECHSEL: ${winner} gewinnt den Titel von ${old||"dem bisherigen Champion"}.`);
+   }
+ }
+}
+function wbAdvanceStories(){
+ (S.feuds||[]).forEach(f=>{
+   f.weeks=(f.weeks||0)+1;
+   if(f.heat>80)f.stage="Blow-off";
+   else if(f.heat>55)f.stage="Escalation";
+   else if(f.heat>35)f.stage="Confrontation";
+   else f.stage="Diss";
+   f.heat=Math.max(0,f.heat-1.5);
+ });
+ S.feuds=(S.feuds||[]).filter(f=>f.weeks<18 || f.heat>25);
+}
+function wbRunShowV2(){
+ if(!WB_CARD.length){alert("Die Card ist noch leer.");return;}
+ const cs=S.careers||{};
+ let total=0,results=[];
+ WB_CARD.forEach(x=>{
+   if(x.type!=="match"){
+     let c=cs[x.a]||{};
+     c.morale=Math.min(100,(c.morale||70)+1);
+     c.momentum=Math.min(100,(c.momentum||50)+2);
+     total+=58+(c.charisma||50)*.15;
+     results.push(`🎤 ${x.a}: ${x.type==="promo"?"Promo":"Angle"} erfolgreich durchgeführt.`);
+     return;
+   }
+   let ca=cs[x.a]||{},cb=cs[x.b]||{};
+   let pa=(ca.momentum||50)+(ca.starpower||50)+.3*(ca.experience||20)+.2*(ca.morale||70);
+   let pb=(cb.momentum||50)+(cb.starpower||50)+.3*(cb.experience||20)+.2*(cb.morale||70);
+   let quality=Math.max(35,Math.min(98,42+(pa+pb)/9+Math.random()*14));
+   let winner=pa>=pb?x.a:x.b;
+   if(Math.random()<.16)winner=winner===x.a?x.b:x.a;
+   let loser=winner===x.a?x.b:x.a;
+   ca.momentum=Math.max(0,Math.min(100,(ca.momentum||50)+(winner===x.a?5:-3)));
+   cb.momentum=Math.max(0,Math.min(100,(cb.momentum||50)+(winner===x.b?5:-3)));
+   ca.morale=Math.max(0,Math.min(100,(ca.morale||70)+(winner===x.a?3:-2)));
+   cb.morale=Math.max(0,Math.min(100,(cb.morale||70)+(winner===x.b?3:-2)));
+   if(x.finish!=="Clean Win")wbCreateFeud(x.a,x.b,x.finish);if(x.finish!=="Clean Win")wbCreateArc(x.a,x.b,`${x.a} vs. ${x.b}`);
+   wbApplyFinishConsequences(x,winner,loser);
+   total+=quality;
+   results.push(`🥊 ${x.a} vs. ${x.b}: <b>${winner}</b> gewinnt · ${x.finish} · ${Math.round(quality)}/100`);
+ });
+ const score=Math.round(total/WB_CARD.length);
+ const pr=(S.promotionData||{})[S.playerPromotion]||{};
+ pr.pop=Math.max(0,Math.min(100,(pr.pop||50)+(score-65)/16));
+ pr.money=(pr.money||0)+Math.round(score*1000);
+ wbAdvanceStories();
+ S.history=S.history||[];
+ S.history.push(`📺 ${WB_SHOW?.name||"Show"}: ${score}/100 · ${WB_CARD.length} Segmente.`);
+ document.getElementById("wbCardList").innerHTML=`<div class="wb-card"><h3>Show Rating: ${score}/100</h3>${results.map(r=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)">${r}</div>`).join("")}</div>`;
+ const cp=document.getElementById("wbConsequences");
+ if(cp){
+   const hot=(S.feuds||[]).filter(f=>(f.heat||0)>=55).slice(0,6);
+   const pd=S.promotionData||{}, pp=pd[S.playerPromotion]||{};
+   cp.innerHTML=`<h3>Konsequenzen</h3>
+     <div>📈 Popularität: <b>${Math.round(pp.pop||0)}</b> · 💰 Kasse: <b>$${Math.round(pp.money||0).toLocaleString()}</b></div>
+     <div style="margin-top:7px">🏆 Champion: <b>${pp.champion||"—"}</b></div>
+     <div style="margin-top:7px"><b>🔥 Aktive Stories</b></div>
+     ${hot.length?hot.map(f=>`<div style="padding:5px 0">${f.a} vs. ${f.b} · Heat ${Math.round(f.heat)} · ${f.stage}</div>`).join(""):"<div class='wb-muted'>Keine Story mit hohem Heat.</div>"}`;
+ }
+ WB_CARD=[];
+ wbRender();wbFillWrestlers();
+}
+window.wbRunShow=wbRunShowV2;
+</script>
+
+<script id="wb-autonomy-engine">
+function wbEnsureWrestlerGoals(){
+ const cs=S.careers||{};
+ Object.entries(cs).forEach(([name,c])=>{
+   if(!c.goals||!c.goals.length){
+     const r=Math.random();
+     c.goals=r<.28?["World Championship"]:r<.52?["Main Event"]:r<.72?["More TV Time"]:r<.86?["Tag Team Success"]:["Better Contract"];
+   }
+   if(c.complaints===undefined)c.complaints=[];
+   if(c.lastBooking===undefined)c.lastBooking="none";
+   if(c.demandLevel===undefined)c.demandLevel=0;
+ });
+}
+function wbAutonomyTick(){
+ wbEnsureWrestlerGoals();
+ const cs=S.careers||{}, pd=S.promotionData||{};
+ Object.entries(cs).forEach(([name,c])=>{
+   if(c.status==="retired")return;
+   c.demandLevel=Math.max(0,c.demandLevel||0);
+   let push=(c.momentum||50);
+   let goal=(c.goals||[])[0]||"Main Event";
+   let booking=c.lastBooking||"none";
+
+   if(c.morale<40)c.demandLevel+=2;
+   else if(c.morale<55)c.demandLevel+=1;
+   else if(c.morale>80)c.demandLevel=Math.max(0,c.demandLevel-1);
+
+   if(goal==="World Championship" && (c.starpower||50)>65 && booking!=="title"){
+     c.demandLevel+=1;
+   }
+   if(goal==="Main Event" && push>65 && booking!=="main"){
+     c.demandLevel+=1;
+   }
+   if(c.contract<=8)c.demandLevel+=2;
+
+   if(c.demandLevel>=7){
+     const chance=Math.random();
+     if(c.contract<=4){
+       c.complaints.push(`Vertrag läuft aus – ${goal} gefordert`);
+       S.history=S.history||[];
+       S.history.push(`📄 ${name}: Vertrag läuft aus. Forderung: ${goal}.`);
+       c.demandLevel=3;
+     }else if(chance<.35){
+       c.morale=Math.max(0,c.morale-8);
+       c.complaints.push(`${goal} gefordert`);
+       S.history=S.history||[];
+       S.history.push(`😤 ${name} ist unzufrieden: ${goal}.`);
+       c.demandLevel=3;
+     }
+   }
+
+   // Free-agent pressure
+   if(c.contract<=0){
+     const old=c.promotion;
+     c.promotion="Free Agent";
+     c.status="free agent";
+     c.contract=0;
+     S.history=S.history||[];
+     S.history.push(`🆓 ${name} ist jetzt Free Agent.`);
+     if(Math.random()<.45){
+       const names=Object.keys(pd);
+       const target=names[Math.floor(Math.random()*names.length)]||"WWE";
+       c.promotion=target;c.status="active";c.contract=24;
+       c.salary=Math.round(120000+(c.starpower||50)*7000);
+       c.loyalty=50;
+       S.history.push(`✍️ ${name} unterschreibt bei ${target}.`);
+     }
+   }
+   if(c.contract>0)c.contract--;
+ });
+}
+function wbShowAutonomy(){
+ const cs=S.careers||{};
+ const arr=Object.entries(cs).filter(([n,c])=>c.status!=="retired").sort((a,b)=>(b[1].demandLevel||0)-(a[1].demandLevel||0)).slice(0,15);
+ const el=document.getElementById("wbContracts");
+ if(!el)return;
+ el.innerHTML=arr.map(([n,c])=>`
+ <div style="padding:9px 0;border-bottom:1px solid var(--line)">
+   <b>${n}</b> · ${c.promotion||"Free Agent"}<br>
+   <span class="wb-muted">Ziel: ${(c.goals||["—"])[0]} · Moral ${Math.round(c.morale||0)} · Vertrag ${c.contract||0} Wochen · Druck ${Math.round(c.demandLevel||0)}/10</span>
+   ${c.complaints?.length?`<br><span>⚠️ ${c.complaints.slice(-1)[0]}</span>`:""}
+ </div>`).join("");
+}
+</script>
+
+<script id="wb-locker-room">
+function wbEnsureSocialWorld(){
+ S.relationships=S.relationships||{};
+ S.stables=S.stables||[];
+ const ns=Object.keys(S.careers||{}).filter(n=>S.careers[n]?.status!=="retired");
+ for(let i=0;i<Math.min(ns.length,40);i++){
+   for(let j=i+1;j<Math.min(ns.length,40);j++){
+     const a=ns[i],b=ns[j],key=[a,b].sort().join("|");
+     if(S.relationships[key]===undefined)S.relationships[key]=Math.round(Math.random()*40-20);
+   }
+ }
+}
+function wbRelationship(a,b){
+ if(!a||!b||a===b)return 0;
+ wbEnsureSocialWorld();
+ const k=[a,b].sort().join("|");
+ return S.relationships[k]||0;
+}
+function wbChangeRelationship(a,b,delta){
+ if(!a||!b||a===b)return;
+ wbEnsureSocialWorld();
+ const k=[a,b].sort().join("|");
+ S.relationships[k]=Math.max(-100,Math.min(100,(S.relationships[k]||0)+delta));
+}
+function wbSocialTick(){
+ wbEnsureSocialWorld();
+ const cs=S.careers||{}, ns=Object.keys(cs).filter(n=>cs[n]?.status!=="retired");
+ for(let i=0;i<Math.min(ns.length,25);i++){
+   for(let j=i+1;j<Math.min(ns.length,25);j++){
+     const a=ns[i],b=ns[j],ca=cs[a],cb=cs[b];
+     if(Math.random()<.035){
+       let d=0;
+       if((ca.morale||70)>80&&(cb.morale||70)>80)d+=4;
+       if((ca.personality||"")=== (cb.personality||""))d+=2;
+       if(Math.abs((ca.momentum||50)-(cb.momentum||50))>35)d-=3;
+       wbChangeRelationship(a,b,d+(Math.random()<.5?-2:2));
+     }
+   }
+ }
+ // Stable formation / breakup
+ if(Math.random()<.035 && ns.length>=3){
+   const members=[...ns].sort(()=>Math.random()-.5).slice(0,3);
+   if(!S.stables.some(st=>members.every(x=>st.members.includes(x)))){
+     S.stables.push({name:members[0]+" & Friends",members,heat:20,chemistry:50});
+     S.history.push(`🤝 Neue Allianz: ${members.join(", ")} schließen sich zusammen.`);
+   }
+ }
+ S.stables.forEach(st=>{
+   st.chemistry=Math.max(0,Math.min(100,(st.chemistry||50)+(Math.random()*8-4)));
+   if(st.chemistry<15 && Math.random()<.12){
+     S.history.push(`💥 ${st.name} zerbricht.`);
+     st.members.forEach((n,i)=>{if(i<st.members.length-1)wbChangeRelationship(n,st.members[i+1],-25);});
+     st.dead=true;
+   }
+ });
+ S.stables=S.stables.filter(x=>!x.dead);
+}
+function wbRenderLocker(){
+ const el=document.getElementById("wbStories"); if(!el)return;
+ wbEnsureSocialWorld();
+ const cs=S.careers||{}, ns=Object.keys(cs).filter(n=>cs[n]?.status!=="retired");
+ const pairs=[];
+ for(let i=0;i<Math.min(ns.length,30);i++)for(let j=i+1;j<Math.min(ns.length,30);j++){
+   pairs.push({a:ns[i],b:ns[j],r:wbRelationship(ns[i],ns[j])});
+ }
+ pairs.sort((a,b)=>a.r-b.r);
+ const bad=pairs.slice(0,6),good=pairs.slice(-6).reverse();
+ el.innerHTML=`<h3>Locker Room</h3>
+ <div><b>🤝 Gute Beziehungen</b>${good.map(x=>`<div style="padding:5px 0">${x.a} + ${x.b} <span class="wb-muted">(${x.r})</span></div>`).join("")}</div>
+ <div style="margin-top:12px"><b>⚡ Spannungen</b>${bad.map(x=>`<div style="padding:5px 0">${x.a} vs. ${x.b} <span class="wb-muted">(${x.r})</span></div>`).join("")}</div>
+ <div style="margin-top:12px"><b>🤜 Stables</b>${(S.stables||[]).map(x=>`<div style="padding:5px 0">${x.name}: ${x.members.join(", ")} · Chemie ${Math.round(x.chemistry)}</div>`).join("")||"<div class='wb-muted'>Noch keine Stables.</div>"}`;
+}
+</script>
+
+<script id="wb-media-engine">
+function wbMediaTick(){
+ S.media=S.media||{buzz:50,stories:[]};
+ const cs=S.careers||{};
+ const hot=Object.entries(cs).filter(([n,c])=>c.status!=="retired").sort((a,b)=>(b[1].momentum||0)-(a[1].momentum||0)).slice(0,5);
+ if(Math.random()<.18 && hot.length){
+   const n=hot[Math.floor(Math.random()*hot.length)][0];
+   const templates=[
+    `Fans diskutieren intensiv über ${n}.`,
+    `${n} sorgt backstage und online für Gesprächsstoff.`,
+    `Die Social-Media-Reaktionen auf ${n} nehmen zu.`,
+    `Analysten sehen ${n} aktuell als wichtigen Namen der Promotion.`
+   ];
+   const story=templates[Math.floor(Math.random()*templates.length)];
+   S.media.stories.unshift({date:typeof currentDateLabel==="function"?currentDateLabel():S.week,text:story});
+   S.media.stories=S.media.stories.slice(0,40);
+   S.media.buzz=Math.max(0,Math.min(100,S.media.buzz+(Math.random()*10-2)));
+   S.history.push(`📰 ${story}`);
+ }
+}
+function wbRenderMedia(){
+ const el=document.getElementById("wbNews");if(!el)return;
+ S.media=S.media||{buzz:50,stories:[]};
+ const stories=S.media.stories||[];
+ el.innerHTML=`<div class="wb-card"><b>📣 Fan Buzz: ${Math.round(S.media.buzz)}</b></div>`+
+ stories.slice(0,20).map(x=>`<div><span class="wb-muted">${x.date||""}</span> · ${x.text}</div>`).join("");
+}
+</script>
+
+<script id="wb-business-engine">
+function wbBusinessInit(){
+ S.business=S.business||{shows:[],ppvs:[],sponsors:0,merch:0};
+}
+function wbBusinessShow(score,type="TV"){
+ wbBusinessInit();
+ const pd=S.promotionData||{},pr=pd[S.playerPromotion]||{};
+ const pop=pr.pop||50,buzz=S.media?.buzz||50;
+ const roster=Object.values(S.careers||{}).filter(c=>c.status!=="retired");
+ const stars=roster.reduce((a,c)=>a+(c.starpower||50),0)/Math.max(1,roster.length);
+ const main=WB_CARD?.length||4;
+ const attendance=Math.round(1200+pop*75+buzz*30+stars*15+Math.random()*1800);
+ const rating=Math.max(.1,Math.round(((pop*.045)+(score*.035)+(buzz*.02))*100)/100);
+ const merch=Math.round((attendance*.8)+(stars*18));
+ const tvValue=Math.round(rating*18000);
+ const record={date:typeof currentDateLabel==="function"?currentDateLabel():S.week,type,score,rating,attendance,merch,revenue:tvValue+merch};
+ S.business.shows.unshift(record);
+ S.business.merch+=merch;
+ pr.money=(pr.money||0)+record.revenue;
+ if(type==="PPV"){
+   const buys=Math.round(8000+pop*900+buzz*500+stars*300+Math.random()*12000);
+   const ppvRevenue=Math.round(buys*29.99);
+   record.buys=buys;record.ppvRevenue=ppvRevenue;record.revenue+=ppvRevenue;
+   pr.money+=ppvRevenue;
+   S.business.ppvs.unshift(record);
+   S.history.push(`💰 ${type}: ${buys.toLocaleString()} Käufe · $${ppvRevenue.toLocaleString()} PPV-Umsatz.`);
+ }
+ S.history.push(`📊 ${type}: ${rating.toFixed(2)} TV-Rating · ${attendance.toLocaleString()} Zuschauer · $${record.revenue.toLocaleString()} Umsatz.`);
+}
+function wbRenderBusiness(){
+ wbBusinessInit();
+ const el=document.getElementById("wbWorld");if(!el)return;
+ const shows=S.business.shows||[], ppvs=S.business.ppvs||[];
+ const avg=shows.length?shows.reduce((a,x)=>a+x.rating,0)/shows.length:0;
+ el.innerHTML=`<h3>Wirtschaft & Medien</h3>
+ <div class="wb-grid">
+ <div class="wb-card"><b>TV-Rating</b><div class="wb-big">${avg.toFixed(2)}</div></div>
+ <div class="wb-card"><b>Merch</b><div class="wb-big">$${Math.round(S.business.merch||0).toLocaleString()}</div></div>
+ <div class="wb-card"><b>PPVs</b><div class="wb-big">${ppvs.length}</div></div>
+ <div class="wb-card"><b>Shows</b><div class="wb-big">${shows.length}</div></div>
+ </div>
+ <h3 style="margin-top:15px">Letzte Shows</h3>
+ ${shows.slice(0,10).map(x=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)">${x.date} · ${x.type} · Rating ${x.rating.toFixed(2)} · ${x.attendance.toLocaleString()} Zuschauer · $${x.revenue.toLocaleString()}</div>`).join("")}`;
+}
+</script>
+
+<script id="wb-market-engine">
+function wbMarketInit(){
+ S.market=S.market||{week:0,news:[],deals:[]};
+}
+function wbPromotionRoster(promo){
+ return Object.entries(S.careers||{}).filter(([n,c])=>c.status!=="retired"&&c.promotion===promo).map(([n,c])=>({n,c}));
+}
+function wbMarketTick(){
+ wbMarketInit();
+ const pd=S.promotionData||{}, promos=Object.keys(pd);
+ if(!promos.length)return;
+ promos.forEach(p=>{
+   const pr=pd[p]; if(!pr)return;
+   const roster=wbPromotionRoster(p);
+   const avg=roster.length?roster.reduce((a,x)=>a+(x.c.starpower||50),0)/roster.length:30;
+   pr.marketShare=pr.marketShare||Math.max(1,pr.pop||30);
+   const quality=(pr.pop||30)*.55+avg*.25+(pr.money>0?20:0);
+   pr.marketShare=Math.max(1,Math.min(100,pr.marketShare+(quality-55)*.006+(Math.random()*1.8-.9)));
+ });
+ // Talent bidding between promotions
+ if(Math.random()<.18){
+   const cs=S.careers||{};
+   const free=Object.entries(cs).filter(([n,c])=>c.status==="free agent"||c.promotion==="Free Agent");
+   if(free.length){
+     const [name,c]=free[Math.floor(Math.random()*free.length)];
+     const targets=promos.filter(p=>p!==S.playerPromotion);
+     const target=targets[Math.floor(Math.random()*targets.length)];
+     if(target){
+       c.promotion=target;c.status="active";c.contract=24+Math.floor(Math.random()*25);
+       c.salary=Math.round(140000+(c.starpower||50)*8500);
+       S.market.deals.unshift({name,target,date:currentDateLabel?.()||S.week});
+       S.history.push(`✍️ Transfer: ${name} unterschreibt bei ${target}.`);
+     }
+   }
+ }
+ // Big-star poaching
+ if(Math.random()<.07){
+   const candidates=Object.entries(cs||{}).filter(([n,c])=>c.status!=="retired"&&c.contract<10&&(c.starpower||50)>65);
+   if(candidates.length){
+     const [name,c]=candidates[Math.floor(Math.random()*candidates.length)];
+     const targets=promos.filter(p=>p!==c.promotion);
+     const target=targets[Math.floor(Math.random()*targets.length)];
+     if(target && Math.random()<.45){
+       c.promotion=target;c.contract=36;c.salary=Math.round(200000+(c.starpower||50)*11000);c.loyalty=35;
+       S.history.push(`💥 Marktbewegung: ${name} wechselt von ${c.promotion||"der bisherigen Promotion"} zu ${target}.`);
+     }
+   }
+ }
+ // Rivalry effects
+ for(let i=0;i<promos.length;i++)for(let j=i+1;j<promos.length;j++){
+   const a=pd[promos[i]],b=pd[promos[j]];
+   if(!a||!b)continue;
+   const diff=(a.marketShare||a.pop||30)-(b.marketShare||b.pop||30);
+   if(Math.abs(diff)>18 && Math.random()<.12){
+     const winner=diff>0?promos[i]:promos[j], loser=diff>0?promos[j]:promos[i];
+     S.history.push(`📈 Marktverschiebung: ${winner} gewinnt gegenüber ${loser} an Einfluss.`);
+     pd[winner].pop=Math.min(100,(pd[winner].pop||50)+.5);
+     pd[loser].pop=Math.max(0,(pd[loser].pop||50)-.3);
+   }
+ }
+ wbRenderMarket();
+}
+function wbRenderMarket(){
+ wbMarketInit();
+ const el=document.getElementById("wbWorld");if(!el)return;
+ const pd=S.promotionData||{};
+ const rows=Object.entries(pd).map(([n,p])=>({n,p,share:p.marketShare||p.pop||0}))
+ .sort((a,b)=>b.share-a.share);
+ el.innerHTML=`<h3>🌎 Wrestling-Markt</h3>
+ <div class="wb-table"><table class="wb-table"><tr><th>Promotion</th><th>Marktanteil</th><th>Popularität</th><th>Roster</th><th>Kasse</th></tr>
+ ${rows.map(x=>`<tr><td><b>${x.n}</b></td><td>${x.share.toFixed(1)}</td><td>${Math.round(x.p.pop||0)}</td><td>${wbPromotionRoster(x.n).length}</td><td>$${Math.round(x.p.money||0).toLocaleString()}</td></tr>`).join("")}</table></div>
+ <h3 style="margin-top:16px">Letzte Marktbewegungen</h3>
+ ${(S.history||[]).filter(x=>x.includes("Transfer")||x.includes("Marktbewegung")).slice(-12).reverse().map(x=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)">${x}</div>`).join("")||"<div class='wb-muted'>Noch keine größeren Marktbewegungen.</div>"}`;
+}
+</script>
+
+<script id="wb-era-engine">
+const WB_ERAS={
+ "1985":{
+  label:"1985 – Territory / WWF Boom",
+  promos:{
+   WWF:{pop:78,money:4200000,style:"Sports Entertainment",champion:"Hulk Hogan",stars:["Hulk Hogan","Andre the Giant","Roddy Piper","Randy Savage","Bob Backlund"]},
+   NWA:{pop:72,money:3000000,style:"Traditional",champion:"Ric Flair",stars:["Ric Flair","Dusty Rhodes","Terry Funk","Junkyard Dog","Kerry Von Erich"]},
+   AWA:{pop:48,money:1400000,style:"Traditional",champion:"Nick Bockwinkel",stars:["Nick Bockwinkel","Hulk Hogan","Curt Hennig"]},
+   "World Class":{pop:52,money:1300000,style:"Territory",champion:"Kerry Von Erich",stars:["Kerry Von Erich","Kevin Von Erich","Michael Hayes"]}
+  }
+ },
+ "1995":{
+  label:"1995 – WWF vs WCW",
+  promos:{
+   WWF:{pop:62,money:5000000,style:"Sports Entertainment",champion:"Diesel",stars:["Shawn Michaels","Bret Hart","Undertaker","Diesel","Yokozuna"]},
+   WCW:{pop:76,money:6500000,style:"Sports Entertainment",champion:"Ric Flair",stars:["Hulk Hogan","Sting","Randy Savage","Ric Flair","Kevin Nash","Scott Hall"]},
+   ECW:{pop:32,money:900000,style:"Hardcore",champion:"Shane Douglas",stars:["Shane Douglas","Mick Foley","Raven","Taz"]}
+  }
+ },
+ "2000":{
+  label:"2000 – Monday Night Wars aftermath",
+  promos:{
+   WWF:{pop:91,money:18000000,style:"Sports Entertainment",champion:"The Rock",stars:["The Rock","Stone Cold Steve Austin","Triple H","Undertaker","Chris Jericho","Kurt Angle","Eddie Guerrero"]},
+   WCW:{pop:54,money:9000000,style:"Sports Entertainment",champion:"Booker T",stars:["Goldberg","Booker T","Sting","Ric Flair","Scott Hall","Kevin Nash"]},
+   ECW:{pop:25,money:700000,style:"Hardcore",champion:"Mike Awesome",stars:["Raven","Taz","Rob Van Dam","Tommy Dreamer"]}
+  }
+ },
+ "2010":{
+  label:"2010 – WWE / TNA / ROH",
+  promos:{
+   WWE:{pop:86,money:30000000,style:"Sports Entertainment",champion:"John Cena",stars:["John Cena","Randy Orton","Undertaker","Edge","Chris Jericho","Rey Mysterio"]},
+   TNA:{pop:45,money:5000000,style:"Sports Entertainment",champion:"AJ Styles",stars:["AJ Styles","Kurt Angle","Sting","Jeff Hardy","Samoa Joe"]},
+   ROH:{pop:25,money:1200000,style:"Wrestling",champion:"Tyler Black",stars:["Daniel Bryan","CM Punk","Tyler Black","Kevin Steen","Roderick Strong"]}
+  }
+ },
+ "2020":{
+  label:"2020 – WWE / AEW / NJPW",
+  promos:{
+   WWE:{pop:92,money:45000000,style:"Sports Entertainment",champion:"Drew McIntyre",stars:["Roman Reigns","Drew McIntyre","Seth Rollins","Becky Lynch","Sasha Banks"]},
+   AEW:{pop:61,money:18000000,style:"Sports Entertainment",champion:"Jon Moxley",stars:["Jon Moxley","Kenny Omega","Chris Jericho","Cody Rhodes","MJF"]},
+   NJPW:{pop:57,money:12000000,style:"Strong Style",champion:"Tetsuya Naito",stars:["Tetsuya Naito","Kazuchika Okada","Hiroshi Tanahashi","Will Ospreay"]}
+  }
+ },
+ "2026":{
+  label:"2026 – Modern Wrestling",
+  promos:{
+   WWE:{pop:95,money:65000000,style:"Sports Entertainment",champion:"Cody Rhodes",stars:["Cody Rhodes","Roman Reigns","CM Punk","Seth Rollins","Rhea Ripley","Becky Lynch"]},
+   AEW:{pop:69,money:24000000,style:"Sports Entertainment",champion:"Kenny Omega",stars:["Kenny Omega","MJF","Will Ospreay","Swerve Strickland","Mercedes Moné"]},
+   TNA:{pop:40,money:6000000,style:"Wrestling",champion:"Moose",stars:["Moose","Nic Nemeth","Mustafa Ali"]},
+   NJPW:{pop:58,money:15000000,style:"Strong Style",champion:"Zack Sabre Jr.",stars:["Zack Sabre Jr.","Tetsuya Naito","Will Ospreay","Hiroshi Tanahashi"]}
+  }
+ }
+};
+function wbLoadEra(key){
+ const era=WB_ERAS[key]||WB_ERAS["2026"];
+ S.era=key;S.worldYear=Number(key);S.calendar={week:1,month:1,year:Number(key)};
+ S.playerPromotion=Object.keys(era.promos)[0];
+ S.promotionData={};S.careers={};S.history=[];S.feuds=[];S.stables=[];
+ Object.entries(era.promos).forEach(([pn,p])=>{
+   S.promotionData[pn]={pop:p.pop,money:p.money,style:p.style,champion:p.champion,contender:p.stars[1],marketShare:p.pop,titleHistory:[{champion:p.champion,date:key}],activeStories:[]};
+   p.stars.forEach((name,i)=>{
+     const age=Number(key)<1990?Math.round(24+Math.random()*12):Number(key)<2010?Math.round(24+Math.random()*15):Math.round(22+Math.random()*14);
+     S.careers[name]={age,years:Math.max(0,age-22),promotion:pn,contract:24+Math.floor(Math.random()*50),salary:Math.round(150000+(p.pop*6000)+(i<2?180000:0)),loyalty:55+Math.floor(Math.random()*30),status:"active",alignment:i%2?"Heel":"Face",morale:70,momentum:55+Math.floor(Math.random()*20),starpower:Math.min(95,p.pop+Math.floor(Math.random()*16)),potential:Math.min(95,60+Math.floor(Math.random()*35)),experience:Math.min(95,40+Math.floor(Math.random()*50)),injured:false,injuryWeeks:0,goals:[i<2?"World Championship":i<4?"Main Event":"More TV Time"],complaints:[],demandLevel:0,lastBooking:"none"};
+   });
+ });
+ S.history.push(`🌎 Historischer Start geladen: ${era.label}.`);
+ render?.();wbRender?.();wbFillWrestlers?.();
+}
+function wbRenderEras(){
+ const el=document.getElementById("wbWorld");if(!el)return;
+ el.innerHTML=`<h3>🌎 Historische Startwelten</h3><p class="wb-muted">Jede Epoche startet mit einer eigenen Wrestlinglandschaft.</p>
+ ${Object.entries(WB_ERAS).map(([k,e])=>`<div class="wb-card" style="margin-bottom:9px"><b>${e.label}</b><br><span class="wb-muted">${Object.keys(e.promos).join(" · ")}</span><br><button class="wb-btn" style="margin-top:7px" onclick="wbLoadEra('${k}')">Diese Welt starten</button></div>`).join("")}`;
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>setTimeout(()=>{if(typeof wbRenderEras==="function")wbRenderEras();},120));
+</script>
+
+<script id="wb-agent-engine">
+function wbAgentInit(){
+ const cs=S.careers||{};
+ Object.entries(cs).forEach(([name,c])=>{
+   c.agent=c.agent||{};
+   const a=c.agent;
+   if(a.ambition===undefined)a.ambition=Math.round(35+Math.random()*60);
+   if(a.ego===undefined)a.ego=Math.round(25+Math.random()*70);
+   if(a.loyalty===undefined)a.loyalty=c.loyalty||Math.round(40+Math.random()*40);
+   if(a.patience===undefined)a.patience=Math.round(20+Math.random()*70);
+   if(a.risk===undefined)a.risk=Math.round(20+Math.random()*70);
+   if(!a.preferredRole)a.preferredRole=(a.ambition>75?"Main Event":a.ambition>55?"Upper Midcard":"Midcard");
+   if(!a.preferredMatch)a.preferredMatch=["Singles","Tag Team","Championship","Main Event"][Math.floor(Math.random()*4)];
+   if(!a.lastAction)a.lastAction="ruhig";
+   if(a.pressure===undefined)a.pressure=0;
+   if(!a.promises)a.promises=[];
+ });
+}
+function wbAgentReaction(name,kind,opponent){
+ wbAgentInit();
+ const c=S.careers?.[name]; if(!c||c.status==="retired")return;
+ const a=c.agent, goal=(c.goals||["Main Event"])[0];
+ let delta=0, action="ruhig";
+ if(kind==="main"){delta=a.ambition>60?8:3;action="Main-Event erhalten";}
+ if(kind==="title"){delta=a.ambition>55?10:5;action="Titelchance erhalten";}
+ if(kind==="win"){delta=6;action="Sieg";}
+ if(kind==="loss"){delta=a.ego>65?-9:-4;action="Niederlage";}
+ if(kind==="dirtyloss"){delta=a.ego>60?-13:-7;action="kontrovers verloren";}
+ if(kind==="ignored"){delta= a.patience>60?-2:-8;action="zu wenig TV-Zeit";}
+ if(kind==="promo"){delta=4;action="Promosegment";}
+ if(kind==="injury"){delta=-10;action="Verletzung";}
+ c.morale=Math.max(0,Math.min(100,(c.morale||70)+delta*.45));
+ a.pressure=Math.max(0,Math.min(100,(a.pressure||0)-delta*.3));
+ a.lastAction=action;
+ if(opponent&&kind==="dirtyloss")wbChangeRelationship?.(name,opponent,-8);
+}
+function wbAgentDecisions(){
+ wbAgentInit();
+ const cs=S.careers||{},pd=S.promotionData||{};
+ Object.entries(cs).forEach(([name,c])=>{
+   if(c.status==="retired")return;
+   const a=c.agent, goal=(c.goals||["Main Event"])[0];
+   a.pressure=Math.max(0,(a.pressure||0)+((c.morale||70)<45?2:0)+((c.contract||0)<8?2:0));
+   if(a.pressure>70){
+     if((c.contract||0)<=6){
+       c.complaints=c.complaints||[];
+       c.complaints.push(`Agent fordert: ${goal}`);
+       S.history.push(`🗣️ ${name} fordert ${goal}.`);
+       a.pressure=45;
+     }else if(a.loyalty<35 && Math.random()<.22){
+       const targets=Object.keys(pd).filter(p=>p!==c.promotion);
+       if(targets.length){
+         const target=targets[Math.floor(Math.random()*targets.length)];
+         const old=c.promotion;
+         c.promotion=target;c.contract=36;c.salary=Math.round((c.salary||180000)*1.25);c.loyalty=50;
+         S.history.push(`🚨 ${name} wechselt von ${old} zu ${target} nach Unzufriedenheit.`);
+         a.pressure=20;
+       }
+     }else if(Math.random()<.25){
+       c.morale=Math.max(0,c.morale-5);
+       S.history.push(`😠 ${name} ist mit seiner aktuellen Rolle unzufrieden.`);
+       a.pressure=35;
+     }
+   }
+   if((c.momentum||50)>82 && a.ambition>70 && Math.random()<.10){
+     c.goals=["World Championship"];
+     S.history.push(`⭐ ${name} fordert den Aufstieg ins Titelrennen.`);
+   }
+ });
+}
+function wbAgentReport(){
+ wbAgentInit();
+ const el=document.getElementById("wbRoster");if(!el)return;
+ const rows=Object.entries(S.careers||{}).filter(([n,c])=>c.status!=="retired")
+ .sort((a,b)=>(b[1].agent?.pressure||0)-(a[1].agent?.pressure||0)).slice(0,25);
+ el.innerHTML=`<table class="wb-table"><tr><th>Wrestler</th><th>Rolle</th><th>Ziel</th><th>Moral</th><th>Agenten-Druck</th><th>Letzte Reaktion</th></tr>`+
+ rows.map(([n,c])=>`<tr><td><b>${n}</b></td><td>${c.agent?.preferredRole||"—"}</td><td>${(c.goals||["—"])[0]}</td><td>${Math.round(c.morale||0)}</td><td>${Math.round(c.agent?.pressure||0)}/100</td><td>${c.agent?.lastAction||"—"}</td></tr>`).join("")+
+ `</table>`;
+}
+</script>
+
+<script id="wb-season-engine">
+function wbSeasonInit(){
+ S.season=S.season||{week:1,showCount:0,arcPlans:[],ppv:null,report:[]};
+ S.week=S.week||1;
+}
+function wbCreateArc(a,b,title="Fehde"){
+ wbSeasonInit();
+ let existing=(S.season.arcPlans||[]).find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a));
+ if(existing)return existing;
+ const arc={id:Date.now()+Math.random(),title,a,b,startWeek:S.week,weeksPlanned:8,weeksDone:0,heat:30,status:"building",beats:[]};
+ S.season.arcPlans.push(arc);
+ S.history.push(`📖 Story-Arc gestartet: ${title} – ${a} vs. ${b}.`);
+ return arc;
+}
+function wbAdvanceArcs(){
+ wbSeasonInit();
+ (S.season.arcPlans||[]).forEach(arc=>{
+   arc.weeksDone++;
+   const feud=wbFindFeud?.(arc.a,arc.b);
+   if(feud)arc.heat=feud.heat;
+   else arc.heat=Math.min(100,(arc.heat||30)+Math.random()*8);
+   if(arc.weeksDone===2)arc.beats.push("Erste Konfrontation");
+   if(arc.weeksDone===4)arc.beats.push("Eskalation");
+   if(arc.weeksDone===6)arc.beats.push("Go-home Show");
+   if(arc.weeksDone>=arc.weeksPlanned){
+     arc.status="PPV READY";
+     arc.beats.push("PPV-Finale");
+   }else if(arc.heat>=65)arc.status="hot";
+   else arc.status="building";
+ });
+}
+function wbGenerateWeeklyReport(){
+ wbSeasonInit();
+ const pd=S.promotionData||{},pr=pd[S.playerPromotion]||{};
+ const cs=S.careers||{};
+ const unhappy=Object.entries(cs).filter(([n,c])=>c.status!=="retired"&&(c.morale||70)<45).sort((a,b)=>a[1].morale-b[1].morale).slice(0,5);
+ const contracts=Object.entries(cs).filter(([n,c])=>c.status!=="retired"&&(c.contract||0)<=8).slice(0,5);
+ const hot=(S.feuds||[]).filter(f=>(f.heat||0)>=55).sort((a,b)=>b.heat-a.heat).slice(0,5);
+ const news=[];
+ if(unhappy.length)news.push(`😠 ${unhappy[0][0]} ist unzufrieden.`);
+ if(contracts.length)news.push(`📄 ${contracts.length} Wrestler haben Verträge unter 8 Wochen.`);
+ if(hot.length)news.push(`🔥 ${hot[0].a} vs. ${hot[0].b} erreicht Heat ${Math.round(hot[0].heat)}.`);
+ if(pr.champion)news.push(`🏆 ${pr.champion} bleibt im Mittelpunkt der Titel-Szene.`);
+ if(!news.length)news.push("📰 Eine ruhige Woche in der Promotion.");
+ S.season.report=[...news,...(S.history||[]).slice(-5)];
+}
+function wbSeasonWeek(){
+ wbSeasonInit();
+ S.season.week=S.week||1;
+ if(typeof wbCareerWorldTick==="function")wbCareerWorldTick();
+ // World simulation before the player's booking.
+ if(typeof wbAutonomyTick==="function")wbAutonomyTick();
+ if(typeof wbSocialTick==="function")wbSocialTick();
+ if(typeof wbMediaTick==="function")wbMediaTick();
+ if(typeof wbMarketTick==="function")wbMarketTick();
+ wbAdvanceArcs();
+ wbGenerateWeeklyReport();
+ S.season.showCount++;
+ S.history.push(`📅 Woche ${S.week} abgeschlossen.`);
+}
+function wbRenderSeasonReport(){
+ wbSeasonInit();
+ const el=document.getElementById("wb-dashboard");if(!el)return;
+ const old=document.getElementById("wbSeasonReport");
+ if(old)old.remove();
+ const box=document.createElement("div");box.id="wbSeasonReport";box.className="wb-card";box.style.marginTop="12px";
+ box.innerHTML=`<h3>📰 Booker Report – Woche ${S.week}</h3>`+
+ (S.season.report||[]).map(x=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)">${x}</div>`).join("");
+ el.appendChild(box);
+}
+function wbRenderArcs(){
+ const el=document.getElementById("wbStories");if(!el)return;
+ wbSeasonInit();
+ const arcs=S.season.arcPlans||[];
+ el.innerHTML=`<h3>📖 Langfristige Story-Arcs</h3>`+
+ (arcs.length?arcs.map(a=>`<div class="wb-card" style="margin-bottom:9px"><b>${a.title}</b><br>${a.a} vs. ${a.b}<br><span class="wb-muted">Woche ${a.weeksDone}/${a.weeksPlanned} · Heat ${Math.round(a.heat)} · ${a.status}</span><br>${a.beats.map(x=>`<span class="wb-muted">• ${x}</span>`).join("<br>")}</div>`).join(""):"<div class='wb-muted'>Noch kein langfristiger Arc.</div>");
+}
+</script>
+
+<script>
+function wbPlanPPV(){
+ wbSeasonInit();
+ const hot=(S.feuds||[]).filter(f=>(f.heat||0)>=45).sort((a,b)=>b.heat-a.heat).slice(0,3);
+ S.season.ppv={name:"Next PPV",week:(S.week||1)+4,matches:hot.map(f=>`${f.a} vs. ${f.b}`)};
+ S.history.push(`📅 PPV geplant für Woche ${S.season.ppv.week}: ${S.season.ppv.matches.join(" · ")||"Titelmatch wird bestimmt"}.`);
+ wbGenerateWeeklyReport();wbRenderSeasonReport();wbRenderArcs();
+ alert(`PPV geplant für Woche ${S.season.ppv.week}.`);
+}
+</script>
+
+<script id="wb-ppv-engine">
+function wbCreatePPV(){
+ wbSeasonInit();
+ const name=document.getElementById("wbPPVName")?.value||"PPV";
+ S.season.ppv={name,week:S.week||1,card:[],planned:true};
+ const hot=(S.feuds||[]).filter(f=>(f.heat||0)>=35).sort((a,b)=>b.heat-a.heat).slice(0,5);
+ hot.forEach(f=>S.season.ppv.card.push({a:f.a,b:f.b,type:"Singles",title:false,finish:"Clean Win"}));
+ const pr=S.promotionData?.[S.playerPromotion]||{};
+ if(pr.champion){
+   const contender=pr.contender||Object.keys(S.careers||{}).find(n=>n!==pr.champion);
+   if(contender)S.season.ppv.card.unshift({a:pr.champion,b:contender,type:"Championship",title:true,finish:"Clean Win"});
+ }
+ S.history.push(`🏟️ ${name} wird vorbereitet.`);
+ wbRenderPPV();
+}
+function wbRenderPPV(){
+ const el=document.getElementById("wbPPVInfo");if(!el)return;
+ const ppv=S.season?.ppv;
+ if(!ppv){el.innerHTML="<div class='wb-muted'>Noch kein PPV vorbereitet.</div>";return;}
+ el.innerHTML=`<b>${ppv.name}</b> · Woche ${ppv.week}<br>`+
+ ppv.card.map((m,i)=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)">${i+1}. ${m.title?"🏆 ":""}${m.a} vs. ${m.b} · ${m.type}</div>`).join("")+
+ `<button class="wb-btn" style="margin-top:9px" onclick="wbRunPPV()">🎬 PPV durchführen</button>`;
+}
+function wbRunPPV(){
+ const ppv=S.season?.ppv;
+ if(!ppv||!ppv.card?.length){alert("Kein PPV vorbereitet.");return;}
+ const cs=S.careers||{},pr=S.promotionData?.[S.playerPromotion]||{};
+ let total=0,results=[];
+ ppv.card.forEach(m=>{
+   const a=cs[m.a]||{},b=cs[m.b]||{};
+   let pa=(a.starpower||50)+(a.momentum||50)+.3*(a.experience||20);
+   let pb=(b.starpower||50)+(b.momentum||50)+.3*(b.experience||20);
+   let q=Math.max(45,Math.min(100,58+(pa+pb)/8+Math.random()*12));
+   let w=pa>=pb?m.a:m.b;
+   if(Math.random()<.14)w=w===m.a?m.b:m.a;
+   const l=w===m.a?m.b:m.a;
+   wbAgentReaction?.(w,"win",l);wbAgentReaction?.(l,"loss",w);
+   if(m.title){
+     const old=pr.champion;
+     pr.champion=w;pr.contender=l;
+     pr.titleHistory=pr.titleHistory||[];
+     pr.titleHistory.push({champion:w,former:old,date:currentDateLabel?.()||S.week});
+     S.history.push(`🏆 PPV-TITELWECHSEL: ${w} ist neuer Champion.`);
+   }
+   if(q>80)wbCreateFeud?.(m.a,m.b,"PPV");
+   total+=q;
+   results.push({match:`${m.a} vs. ${m.b}`,winner:w,quality:Math.round(q),title:m.title});
+ });
+ const score=Math.round(total/ppv.card.length);
+ const pop=pr.pop||50,buzz=S.media?.buzz||50;
+ const attendance=Math.round(9000+pop*450+buzz*180+score*110+Math.random()*5000);
+ const buys=Math.round(25000+pop*1900+buzz*800+score*900+Math.random()*18000);
+ const gate=Math.round(attendance*65),ppvRev=Math.round(buys*34.99),merch=Math.round(attendance*2.4);
+ const revenue=gate+ppvRev+merch;
+ pr.money=(pr.money||0)+revenue;
+ pr.pop=Math.min(100,Math.max(0,(pr.pop||50)+(score-72)/8));
+ S.business=S.business||{shows:[],ppvs:[],merch:0};
+ S.business.ppvs.unshift({date:currentDateLabel?.()||S.week,type:"PPV",score,rating:score/30,attendance,buys,revenue,merch});
+ S.business.merch+=merch;
+ S.history.push(`🏟️ ${ppv.name}: ${score}/100 · ${attendance.toLocaleString()} Zuschauer · ${buys.toLocaleString()} Buys · $${revenue.toLocaleString()} Umsatz.`);
+ ppv.results=results;ppv.score=score;ppv.attendance=attendance;ppv.buys=buys;ppv.revenue=revenue;ppv.completed=true;
+ wbRenderPPV();
+ const el=document.getElementById("wbPPVInfo");
+ el.innerHTML=`<h3>${ppv.name} – ${score}/100</h3>
+ <div class="wb-grid">
+ <div class="wb-card"><b>Attendance</b><div class="wb-big">${attendance.toLocaleString()}</div></div>
+ <div class="wb-card"><b>Buys</b><div class="wb-big">${buys.toLocaleString()}</div></div>
+ <div class="wb-card"><b>Revenue</b><div class="wb-big">$${revenue.toLocaleString()}</div></div>
+ <div class="wb-card"><b>Fan Buzz</b><div class="wb-big">${Math.round(S.media?.buzz||50)}</div></div>
+ </div>
+ <h3 style="margin-top:12px">Match Results</h3>
+ ${results.map((r,i)=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)">${i+1}. ${r.title?"🏆 ":""}${r.match} — <b>${r.winner}</b> · ${r.quality}/100</div>`).join("")}
+ <h3 style="margin-top:12px">🌎 Auswirkungen</h3>
+ <div>Popularität: <b>${Math.round(pr.pop||0)}</b></div>
+ <div>Kasse: <b>$${Math.round(pr.money||0).toLocaleString()}</b></div>
+ <div>Neue/heiße Stories werden in den kommenden Wochen weiterentwickelt.</div>`;
+}
+</script>
+
+<script id="wb-stability-overrides">
+function wbRenderWorld(){
+ const el=document.getElementById("wbWorld"); if(!el)return;
+ const pd=S.promotionData||{}, cs=S.careers||{};
+ const active=Object.values(cs).filter(c=>c.status!=="retired").length;
+ const feats=S.feuds||[];
+ const rows=Object.entries(pd).map(([n,p])=>({
+   n,p,share:p.marketShare||p.pop||0,
+   roster:Object.values(cs).filter(c=>c.status!=="retired"&&c.promotion===n).length
+ })).sort((a,b)=>b.share-a.share);
+ el.innerHTML=
+ `<h3>🌎 Wrestling World</h3>
+  <div class="wb-card"><b>Datum:</b> ${typeof currentDateLabel==="function"?currentDateLabel():(S.calendar?.year||S.worldYear||"—")}
+  · <b>Aktive Wrestler:</b> ${active} · <b>Fehden:</b> ${feats.length}</div>
+  <h3 style="margin-top:14px">Promotions & Markt</h3>
+  <div class="wb-table"><table class="wb-table"><tr><th>Promotion</th><th>Markt</th><th>Pop</th><th>Roster</th><th>Champion</th></tr>
+  ${rows.map(x=>`<tr><td><b>${x.n}</b></td><td>${x.share.toFixed(1)}</td><td>${Math.round(x.p.pop||0)}</td><td>${x.roster}</td><td>${x.p.champion||"—"}</td></tr>`).join("")}
+  </table></div>
+  <h3 style="margin-top:16px">🌎 Historische Startwelten</h3>
+  <div class="wb-muted">Eine neue Welt setzt Promotionen, Roster und Champions zurück.</div>
+  ${Object.entries(WB_ERAS||{}).map(([k,e])=>`<div class="wb-card" style="margin:8px 0"><b>${e.label}</b><br><span class="wb-muted">${Object.keys(e.promos).join(" · ")}</span><br><button class="wb-btn" style="margin-top:7px" onclick="wbLoadEra('${k}')">Diese Welt starten</button></div>`).join("")}
+  <h3 style="margin-top:16px">📈 Letzte Marktbewegungen</h3>
+  ${(S.history||[]).filter(x=>x.includes("Transfer")||x.includes("Marktbewegung")||x.includes("wechseln")).slice(-8).reverse().map(x=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)">${x}</div>`).join("")||"<div class='wb-muted'>Noch keine größeren Marktbewegungen.</div>"}`;
+}
+function wbRenderMarket(){ wbRenderWorld(); }
+
+function wbPlanPPV(){
+ wbSeasonInit();
+ const hot=(S.feuds||[]).filter(f=>(f.heat||0)>=45).sort((a,b)=>b.heat-a.heat).slice(0,3);
+ const ppv={name:"Next PPV",week:(S.week||1)+4,card:[],planned:true};
+ const pr=S.promotionData?.[S.playerPromotion]||{};
+ if(pr.champion){
+   const contender=pr.contender||Object.keys(S.careers||{}).find(n=>n!==pr.champion);
+   if(contender)ppv.card.push({a:pr.champion,b:contender,type:"Championship",title:true,finish:"Clean Win"});
+ }
+ hot.forEach(f=>ppv.card.push({a:f.a,b:f.b,type:"Singles",title:false,finish:"Clean Win"}));
+ S.season.ppv=ppv;
+ S.history.push(`📅 PPV geplant für Woche ${ppv.week}: ${ppv.name}.`);
+ wbGenerateWeeklyReport();wbRenderSeasonReport();wbRenderArcs();wbRenderPPV();
+ alert(`PPV geplant für Woche ${ppv.week}.`);
+}
+</script>
+
+<script id="wb-longterm-sim">
+function wbLongTermSim(years=10){
+  wbSeasonInit();
+  const startWeek=S.week||1;
+  const weeks=Math.max(1,Math.round(years*52));
+  const before={
+    money:Object.values(S.promotionData||{}).reduce((n,p)=>n+(p.money||0),0),
+    wrestlers:Object.keys(S.careers||{}).length,
+    retired:Object.values(S.careers||{}).filter(c=>c.status==="retired").length,
+    transfers:0, champions:0
+  };
+  for(let i=0;i<weeks;i++){
+    try{
+      wbSeasonWeek();
+      if(typeof wbAgentDecisions==="function")wbAgentDecisions();
+      if(typeof wbAdvanceArcs==="function")wbAdvanceArcs();
+      if(typeof advanceCalendar==="function")advanceCalendar(1);
+      S.week=(S.week||1)+1;
+      S.season.week=S.week;
+      if((S.week-startWeek+1)%52===0){
+        if(typeof wbGenerateWeeklyReport==="function")wbGenerateWeeklyReport();
+      }
+    }catch(e){
+      console.warn("Long-term simulation stopped at week",S.week,e);
+      break;
+    }
+  }
+  const after={
+    money:Object.values(S.promotionData||{}).reduce((n,p)=>n+(p.money||0),0),
+    wrestlers:Object.keys(S.careers||{}).length,
+    retired:Object.values(S.careers||{}).filter(c=>c.status==="retired").length,
+    feuds:(S.feuds||[]).length,
+    stables:(S.stables||[]).length,
+    shows:S.season?.showCount||0
+  };
+  S.longTermReport={
+    years,
+    startWeek,
+    endWeek:S.week,
+    wrestlersStart:before.wrestlers,
+    wrestlersEnd:after.wrestlers,
+    retiredDelta:after.retired-before.retired,
+    active:after.wrestlers-after.retired,
+    feuds:after.feuds,
+    stables:after.stables,
+    shows:after.shows,
+    money:after.money,
+    generated:new Date().toLocaleString()
+  };
+  S.history.push(`⏩ Langzeitsimulation: ${years} Jahre bis Woche ${S.week}. ${after.retired-before.retired} Karriereenden, ${after.feuds} Fehden, ${after.stables} Stables.`);
+  wbRenderLongTerm();wbRenderCareerInfo();
+  wbRender?.();
+}
+function wbRenderLongTerm(){
+  const el=document.getElementById("wbLongTermInfo");if(!el)return;
+  const r=S.longTermReport;
+  el.innerHTML=r?`
+   <h3>⏩ ${r.years}-Jahres-Simulation</h3>
+   <div class="wb-grid">
+    <div class="wb-card"><b>Simulierte Wochen</b><div class="wb-big">${r.endWeek-r.startWeek+1}</div></div>
+    <div class="wb-card"><b>Aktive Wrestler</b><div class="wb-big">${r.active}</div></div>
+    <div class="wb-card"><b>Karriereenden</b><div class="wb-big">${r.retiredDelta}</div></div>
+    <div class="wb-card"><b>Fehden</b><div class="wb-big">${r.feuds}</div></div>
+   </div>
+   <p>Shows simuliert: <b>${r.shows}</b> · Stables: <b>${r.stables}</b> · Promotionskapital: <b>$${Math.round(r.money).toLocaleString()}</b></p>
+   <div class="wb-muted">Die Simulation wurde ohne manuelles Booking durchgeführt. Die Welt ist anschließend in diesem Zustand weiter spielbar.</div>
+  `:"Noch keine Langzeitsimulation durchgeführt.";
+}
+function wbOpenLongTerm(){
+ const y=parseInt(prompt("Wie viele Jahre simulieren?", "10"),10);
+ if(!Number.isFinite(y)||y<1)return;
+ wbLongTermSim(Math.min(50,y));
+}
+</script>
+
+<script id="wb-career-sim-v2">
+function wbCareerStep(c){
+  if(!c)return;
+  c.age=(c.age||25)+1/52;
+  c.experience=Math.min(100,(c.experience||20)+0.035);
+  c.momentum=c.momentum||50;
+  c.starpower=c.starpower||50;
+  c.potential=c.potential??70;
+  c.inRing=c.inRing||50;c.mic=c.mic||50;c.charisma=c.charisma||50;c.athleticism=c.athleticism||50;
+
+  const age=c.age, pot=c.potential;
+  let growth=0;
+  if(age<28) growth=(pot-50)*0.0018+0.018;
+  else if(age<32) growth=(pot-50)*0.0011+0.008;
+  else if(age<36) growth=0.002;
+  else if(age<40) growth=-0.004;
+  else growth=-0.009;
+
+  const push=(c.momentum-50)/1800;
+  const health=(c.injured?-.015:0);
+  const noise=(Math.random()-.5)*.006;
+  const delta=growth+push+health+noise;
+
+  c.inRing=Math.max(1,Math.min(100,c.inRing+delta*100));
+  c.mic=Math.max(1,Math.min(100,c.mic+delta*65));
+  c.charisma=Math.max(1,Math.min(100,c.charisma+delta*55));
+  c.athleticism=Math.max(1,Math.min(100,c.athleticism+delta*90));
+
+  const skill=.35*c.inRing+.22*c.mic+.18*c.charisma+.15*c.athleticism+.10*c.experience;
+  const target=Math.max(10,Math.min(100,skill));
+  c.starpower=Math.max(1,Math.min(100,c.starpower+(target-c.starpower)*.018));
+
+  if(age>=45 && Math.random()<.004){
+    c.status="retired";
+    c.retirementReason="Age";
+    S.history.push(`🏁 ${c.name||"Ein Wrestler"} beendet seine Karriere im Alter von ${Math.round(age)}.`);
+  }
+}
+function wbCareerWorldTick(){
+  const cs=S.careers||{};
+  Object.values(cs).forEach(c=>{
+    if(c.status==="retired")return;
+    wbCareerStep(c);
+    if(c.injured && Math.random()<.035)c.injured=false;
+  });
+}
+</script>
+
+<script id="wb-career-render">
+function wbRenderCareerInfo(){
+ const el=document.getElementById("wbCareerInfo");if(!el)return;
+ const arr=Object.values(S.careers||{}).filter(c=>c.status!=="retired")
+   .sort((a,b)=>(b.starpower||0)-(a.starpower||0)).slice(0,8);
+ el.innerHTML=`<b>Aktuelle Top-Starpower</b><br>`+
+ arr.map((c,i)=>`${i+1}. ${c.name} · ${Math.round(c.starpower||0)} SP · ${Math.round(c.momentum||0)} Momentum · ${Math.round(c.age||0)} J.`).join("<br>");
+}
+</script>
+
+<script id="wb-fast-forward-v2">
+function wbLongTermSim(years=10){
+  wbSeasonInit();
+  const weeks=Math.max(1,Math.min(50,Math.round(years)));
+  const totalWeeks=weeks*52;
+  const startWeek=S.week||1;
+  const start={
+    wrestlers:Object.keys(S.careers||{}).length,
+    retired:Object.values(S.careers||{}).filter(c=>c.status==="retired").length,
+    money:Object.values(S.promotionData||{}).reduce((n,p)=>n+(p.money||0),0),
+    titles:Object.values(S.promotionData||{}).map(p=>p.champion).filter(Boolean).length
+  };
+
+  // Fast-forward: no DOM updates, alerts, or weekly reports.
+  const oldAlert=window.alert;
+  window.alert=function(){};
+  try{
+    for(let i=0;i<totalWeeks;i++){
+      // Core world evolution.
+      if(typeof wbCareerWorldTick==="function")wbCareerWorldTick();
+      if(typeof wbSocialTick==="function")wbSocialTick();
+      if(typeof wbMediaTick==="function")wbMediaTick();
+      if(typeof wbMarketTick==="function")wbMarketTick();
+      if(typeof wbAdvanceArcs==="function")wbAdvanceArcs();
+      if(typeof wbAutonomyTick==="function")wbAutonomyTick();
+      if(typeof wbAgentDecisions==="function")wbAgentDecisions();
+
+      // Keep the calendar/world clock moving without rendering.
+      if(typeof advanceCalendar==="function")advanceCalendar(1);
+      S.week=(S.week||1)+1;
+      if(S.season)S.season.week=S.week;
+
+      // Every 52 weeks, create a compact annual checkpoint only.
+      if((i+1)%52===0){
+        S.history=S.history||[];
+        S.history.push(`📆 Jahreswechsel: Woche ${S.week}.`);
+      }
+    }
+  }catch(e){
+    console.warn("Fast-forward stopped at week",S.week,e);
+  }finally{
+    window.alert=oldAlert;
+  }
+
+  const careers=Object.values(S.careers||{});
+  const active=careers.filter(c=>c.status!=="retired");
+  const retired=careers.filter(c=>c.status==="retired");
+  const promotions=Object.entries(S.promotionData||{}).map(([name,p])=>({
+    name,
+    pop:Math.round(p.pop||0),
+    money:Math.round(p.money||0),
+    champion:p.champion||"—",
+    roster:careers.filter(c=>c.status!=="retired"&&c.promotion===name).length
+  })).sort((a,b)=>b.pop-a.pop);
+
+  const movers=active.slice().sort((a,b)=>(b.starpower||0)-(a.starpower||0)).slice(0,10);
+  const oldStars=active.slice().sort((a,b)=>(a.starpower||0)-(b.starpower||0)).slice(0,5);
+
+  S.longTermReport={
+    years,weeks:totalWeeks,startWeek,endWeek:S.week,
+    wrestlersStart:start.wrestlers,wrestlersEnd:careers.length,
+    retiredStart:start.retired,retiredEnd:retired.length,
+    retiredDelta:retired.length-start.retired,
+    active:active.length,
+    feuds:(S.feuds||[]).length,
+    stables:(S.stables||[]).length,
+    promotions,
+    movers:movers.map(c=>({name:c.name,sp:Math.round(c.starpower||0),age:Math.round(c.age||0),promotion:c.promotion||"—"})),
+    oldStars:oldStars.map(c=>({name:c.name,sp:Math.round(c.starpower||0),age:Math.round(c.age||0),promotion:c.promotion||"—"})),
+    money:Object.values(S.promotionData||{}).reduce((n,p)=>n+(p.money||0),0),
+    generated:new Date().toLocaleString()
+  };
+
+  S.history.push(`⏩ FAST-FORWARD: ${years} Jahre / ${totalWeeks} Wochen bis Woche ${S.week}.`);
+  wbRenderLongTerm();
+  wbRenderCareerInfo?.();
+  wbRenderWorld?.();
+  wbRender?.();
+}
+
+function wbRenderLongTerm(){
+ const el=document.getElementById("wbLongTermInfo");if(!el)return;
+ const r=S.longTermReport;
+ if(!r){el.innerHTML="Noch keine Langzeitsimulation durchgeführt.";return;}
+ el.innerHTML=`
+ <h3>⏩ ${r.years}-Jahres-Simulation</h3>
+ <div class="wb-grid">
+  <div class="wb-card"><b>Simulierte Wochen</b><div class="wb-big">${r.weeks}</div></div>
+  <div class="wb-card"><b>Aktive Wrestler</b><div class="wb-big">${r.active}</div></div>
+  <div class="wb-card"><b>Karriereenden</b><div class="wb-big">${r.retiredDelta}</div></div>
+  <div class="wb-card"><b>Fehden</b><div class="wb-big">${r.feuds}</div></div>
+ </div>
+ <h3>🏆 Promotions nach Popularität</h3>
+ ${r.promotions.map(p=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)"><b>${p.name}</b> · Pop ${p.pop} · Roster ${p.roster} · Champion ${p.champion} · $${p.money.toLocaleString()}</div>`).join("")}
+ <h3 style="margin-top:14px">⭐ Top-Starpower nach dem Fast-Forward</h3>
+ ${r.movers.map((x,i)=>`${i+1}. <b>${x.name}</b> · ${x.sp} SP · ${x.age} J. · ${x.promotion}`).join("<br>")}
+ <h3 style="margin-top:14px">📉 Niedrige Starpower</h3>
+ ${r.oldStars.map(x=>`${x.name} · ${x.sp} SP · ${x.age} J. · ${x.promotion}`).join("<br>")}
+ <p class="wb-muted" style="margin-top:12px">Die Welt wurde ohne wöchentliches UI-Rendering simuliert und kann jetzt normal weitergespielt werden.</p>`;
+}
+function wbOpenLongTerm(){
+ const y=parseInt(prompt("Wie viele Jahre simulieren?","10"),10);
+ if(!Number.isFinite(y)||y<1)return;
+ wbLongTermSim(Math.min(50,y));
+}
+</script>
+
+<script id="wb-clean-boot">
+(function(){
+  if(window.__WB_CLEAN_BOOT__) return;
+  window.__WB_CLEAN_BOOT__=true;
+
+  let booted=false;
+  function cleanBoot(){
+    if(booted)return;
+    booted=true;
+    try{
+      if(typeof wbSeasonInit==="function")wbSeasonInit();
+      if(typeof wbEnsureSocialWorld==="function")wbEnsureSocialWorld();
+      if(typeof wbMarketInit==="function")wbMarketInit();
+      if(typeof wbAgentInit==="function")wbAgentInit();
+      if(typeof wbRender==="function")wbRender();
+      if(typeof wbRenderWorld==="function")wbRenderWorld();
+      if(typeof wbRenderPPV==="function")wbRenderPPV();
+      if(typeof wbRenderLongTerm==="function")wbRenderLongTerm();
+      if(typeof wbRenderCareerInfo==="function")wbRenderCareerInfo();
+    }catch(e){
+      console.error("Wrestling Booker boot error:",e);
+    }
+  }
+
+  // Run once after the DOM is available. Existing handlers remain compatible.
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",cleanBoot,{once:true});
+  else setTimeout(cleanBoot,0);
+})();
+</script>
+
+<script id="wb-diagnostics">
+function wbDiagnostics(){
+ const result={
+   boot:!!window.__WB_CLEAN_BOOT__,
+   careers:Object.keys(S.careers||{}).length,
+   promotions:Object.keys(S.promotionData||{}).length,
+   feuds:(S.feuds||[]).length,
+   stables:(S.stables||[]).length,
+   week:S.week||1,
+   htmlBytes:document.documentElement.outerHTML.length
+ };
+ console.table(result);
+ return result;
+}
+</script>
+
+<script id="wb-smoke-test">
+async function wbSmokeTest(){
+ const el=document.getElementById("wbSmokeResult");
+ if(!el)return;
+ const out=[];
+ const check=(label,fn)=>{
+   const t=performance.now();
+   try{fn();out.push(`✅ ${label} <span class="wb-muted">(${Math.round(performance.now()-t)} ms)</span>`);}
+   catch(e){out.push(`❌ ${label}: ${String(e.message||e)}`);}
+ };
+ el.innerHTML="Test läuft …";
+ check("Boot-State",()=>{if(!window.__WB_CLEAN_BOOT__)throw new Error("Clean Boot nicht aktiv");});
+ check("Welt geladen",()=>{if(!Object.keys(S.careers||{}).length)throw new Error("Kein Roster");});
+ check("Promotionen geladen",()=>{if(!Object.keys(S.promotionData||{}).length)throw new Error("Keine Promotionen");});
+ check("1 Woche",()=>{const w=S.week||1;wbNextWeek();if((S.week||0)<=w)throw new Error("Woche wurde nicht erhöht");});
+ check("1-Jahres-Fast-Forward",()=>{wbLongTermSim(1);if((S.week||0)<50)throw new Error("Kalender nicht fortgeschritten");});
+ el.innerHTML=out.join("<br>")+`<br><br><b>Ergebnis:</b> ${out.every(x=>x.startsWith("✅"))?"Engine-Smoke-Test bestanden":"Mindestens ein Test fehlgeschlagen"}`;
+}
+</script>
+</body></html>
